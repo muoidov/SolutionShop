@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SolutionShop.Data.Configurations;
 using SolutionShop.Data.Entities;
+using SolutionShop.Data.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,9 +30,11 @@ namespace SolutionShop.Data.EF
             modelBuilder.ApplyConfiguration(new ProductTranslationconfiguration());
             modelBuilder.ApplyConfiguration(new ProductImageconfiguration());
             modelBuilder.ApplyConfiguration(new Promotionconfiguration());
-
-            //base.OnModelCreating(modelBuilder);
+            //Data seed
+            modelBuilder.Seed();   
         }
+            //base.OnModelCreating(modelBuilder);
+        
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
 
