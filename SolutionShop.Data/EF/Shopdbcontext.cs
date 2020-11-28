@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SolutionShop.Data.Configurations;
 using SolutionShop.Data.Entities;
 using SolutionShop.Data.Extensions;
@@ -8,7 +10,7 @@ using System.Text;
 
 namespace SolutionShop.Data.EF
 {
-   public class Shopdbcontext : DbContext { 
+   public class Shopdbcontext : IdentityDbContext<AppUser,AppRole,Guid> { 
         public Shopdbcontext(DbContextOptions options) : base(options)
         {
           
@@ -30,6 +32,13 @@ namespace SolutionShop.Data.EF
             modelBuilder.ApplyConfiguration(new ProductTranslationconfiguration());
             modelBuilder.ApplyConfiguration(new ProductImageconfiguration());
             modelBuilder.ApplyConfiguration(new Promotionconfiguration());
+            modelBuilder.ApplyConfiguration(new AppUserconfiguration());
+            modelBuilder.ApplyConfiguration(new AppRoleconfiguration());
+            modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
+            modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x=>new {x.UserId,x.RoleId });
+            modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogins").HasKey(x=>x.UserId);
+            modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims");
+            modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(x=>x.UserId);
             //Data seed
             modelBuilder.Seed();   
         }

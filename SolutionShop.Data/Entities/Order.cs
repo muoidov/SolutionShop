@@ -19,7 +19,7 @@ namespace SolutionShop.Data.Entities
 
         public List<OrderDetail> OrderDetails { get; set; }
 
-       // public AppUser AppUser { get; set; }
+        public AppUser AppUser { get; set; }
 
 
     }
