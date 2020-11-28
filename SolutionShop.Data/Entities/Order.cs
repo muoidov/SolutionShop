@@ -1,4 +1,5 @@
-﻿using eShopSolution.Data.Enums;
+﻿
+using SolutionShop.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;

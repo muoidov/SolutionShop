@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SolutionShop.Data.Configurations;
 using SolutionShop.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,26 @@ namespace SolutionShop.Data.EF
         public Shopdbcontext(DbContextOptions options) : base(options)
         {
           
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new Appconfiguration());
+            modelBuilder.ApplyConfiguration(new Productconfiguration());
+            modelBuilder.ApplyConfiguration(new Categoryconfiguration());
+            modelBuilder.ApplyConfiguration(new ProductInCategoryconfiguration());
+            modelBuilder.ApplyConfiguration(new Orderconfiguration());
+            modelBuilder.ApplyConfiguration(new OrderDetailconfiguration());
+            modelBuilder.ApplyConfiguration(new Promotionconfiguration());
+            modelBuilder.ApplyConfiguration(new Cartconfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryTranslationconfiguration());
+            modelBuilder.ApplyConfiguration(new Contactconfiguration());
+            modelBuilder.ApplyConfiguration(new Transactionconfiguration());
+            modelBuilder.ApplyConfiguration(new Languageconfiguration());
+            modelBuilder.ApplyConfiguration(new ProductTranslationconfiguration());
+            modelBuilder.ApplyConfiguration(new ProductImageconfiguration());
+            modelBuilder.ApplyConfiguration(new Promotionconfiguration());
+
+            //base.OnModelCreating(modelBuilder);
         }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
