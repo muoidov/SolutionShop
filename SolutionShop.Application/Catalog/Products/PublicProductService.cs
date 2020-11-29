@@ -1,7 +1,4 @@
-﻿
-//using SolutionShop.Application.Catalog.Products.Dtos.Mangage;
-using SolutionShop.Application.Catalog.Products.Dtos;
-using SolutionShop.Application.Dtos;
+﻿using SolutionShop.ViewModel.Catalog.Products;
 using SolutionShop.Data.EF;
 using System;
 using System.Collections.Generic;
@@ -9,7 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using SolutionShop.Application.Catalog.Products.Dtos.Mangage;
+using SolutionShop.ViewModel.Common;
+//using SolutionShop.ViewModel.Catalog.Products.Manage;
 
 namespace SolutionShop.Application.Catalog.Products
 {
@@ -22,16 +20,15 @@ namespace SolutionShop.Application.Catalog.Products
         }
 
 
-        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetProductPagingRequest request)
+        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(PGetProductPagingRequest request)
         {
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId
                         join c in _context.Categories on pic.CategoryId equals c.Id
-                        select new { p, pt };
+                        select new { p, pt,pic };
             //loc
-            if (!string.IsNullOrEmpty(request.Keyword))
-                query = query.Where(x => x.pt.Name.Contains(request.Keyword));
+          
             if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
             {
                 query = query.Where(p => p.pic.CategoryId == request.CategoryId);

@@ -1,15 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SolutionShop.Application.Catalog.Manage.Products.Dtos;
-using SolutionShop.Application.Catalog.Products.Dtos;
-using SolutionShop.Application.Dtos;
+using SolutionShop.ViewModel.Catalog.Products;
 using SolutionShop.Data.EF;
 using SolutionShop.Data.Entities;
 using SolutionShop.Utilities.Exceptions;
+using SolutionShop.ViewModel.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.Net.Http.Headers;
+using System.IO;
+using SolutionShop.Application.Common;
 
 namespace SolutionShop.Application.Catalog.Products
 {
@@ -17,9 +20,17 @@ namespace SolutionShop.Application.Catalog.Products
     {
         //chi doc
         private readonly Shopdbcontext _context;
-        public ManageProductService(Shopdbcontext context)
+        private readonly IStorageService _storageService;
+
+        public ManageProductService(Shopdbcontext context,IStorageService storageService)
         {
             _context = context;
+            _storageService = storageService;
+        }
+
+        public Task<int> AddImage(int productId, List<IFormFile> files)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task AddViewCount(int productId)
@@ -54,6 +65,22 @@ namespace SolutionShop.Application.Catalog.Products
 
 
             };
+            //Save image
+            if (request.ThumbnailImage != null)
+            {
+                product.ProductImages = new List<ProductImage>()
+                {
+                    new ProductImage()
+                    {
+                        Caption="Anh dep",
+                        DateCreated=DateTime.Now,
+                        FileSize=request.ThumbnailImage.Length,
+                        ImagePath=await this.SaveFile(request.ThumbnailImage),
+                        IsDefault=true,
+                        SortOrder=1
+                    }
+                };
+            }
             //dung async tan dang thread chuong trinh chay ngon hon
             _context.Products.Add(product);
 
@@ -64,29 +91,32 @@ namespace SolutionShop.Application.Catalog.Products
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null) throw new Shopexception($"Không thể tìm thấy:{productId}");
+            var images = _context.ProductImages.Where(i => i.ProductId == productId);
+            foreach(var image in images)
+            {
+                await _storageService.DeleteFileAsync(image.ImagePath);
+            }
+            
             _context.Products.Remove(product);
            return await _context.SaveChangesAsync();
+
         }
 
-        public Task<List<ProductViewModel>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request)
+        public async Task<PagedResult<ProductViewModel>> GetAllPaging(MGetProductPagingRequest request)
         {
             //tim kiem
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId
                         join c in _context.Categories on pic.CategoryId equals c.Id
-                        select new {p,pt };
+                        select new { p, pt,pic };
             //loc
             if (!string.IsNullOrEmpty(request.Keyword))
                 query = query.Where(x => x.pt.Name.Contains(request.Keyword));
-            if (request.CategoryIds.Count > 0)
+
+             if (request.CategoryIds.Count > 0)
             {
-                query = query.Where(p => p.pic.CategoryIds.Contains(p.pic.CategoryId));
+                query = query.Where(p => request.CategoryIds.Contains(p.pic.CategoryId));
             }
             //paging
             int totalRow = await query.CountAsync();
@@ -111,9 +141,20 @@ namespace SolutionShop.Application.Catalog.Products
             return pageResult;
 
         }
+
+        public Task<List<ProductImageViewModel>> GetListImage(int productId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> RemoveImages(int imageId, List<IFormFile> files)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<int> Update(ProductUpdateRequest request)
         {
-            var product = await _context.Products.Find(request.Id);
+            var product =  _context.Products.Find(request.Id);
             var productTranslations = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == request.Id&&
             x.LanguageId==request.LanguageId);
             if(product==null || productTranslations==null) throw new Shopexception($"Không thể tìm thấy:{request.Id}");
@@ -121,10 +162,28 @@ namespace SolutionShop.Application.Catalog.Products
             productTranslations.SeoAlias = request.SeoAlias;
             productTranslations.SeoDescription = request.SeoDescription;
             productTranslations.SeoTitle = request.SeoTitle;
-            productTranslations.Desctiption = request.Description;
+            productTranslations.Description = request.Description;
             productTranslations.Details = request.Details;
+            //
+            if (request.ThumbnailImage != null)
+            {
+                var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.IsDefault == true && i.ProductId == request.Id);
+                if (thumbnailImage != null)
+                {
+                   thumbnailImage.FileSize = request.ThumbnailImage.Length;
+                    thumbnailImage.ImagePath = await this.SaveFile(request.ThumbnailImage);
+                    _context.ProductImages.Update(thumbnailImage);
+                }
+                
+            }
+            
             return await _context.SaveChangesAsync();
 
+        }
+
+        public Task<int> UpdateImage(int imageId, string caption, bool isDefault)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<bool> UpdatePrice(int productId, decimal newPrice)
@@ -141,6 +200,13 @@ namespace SolutionShop.Application.Catalog.Products
             if (product == null) throw new Shopexception($"khon tim thay id:{productId}");
             product.Stock += addedQuantity;
             return await _context.SaveChangesAsync() > 0;
+        }
+        private async Task<string> SaveFile(IFormFile file)
+        {
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
+            return fileName;
         }
     }
 }
