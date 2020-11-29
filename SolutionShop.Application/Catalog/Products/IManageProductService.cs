@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SolutionShop.ViewModel.Catalog.Products;
-using SolutionShop.ViewModel.Catalog.Products.Manage;
 using SolutionShop.ViewModel.Common;
 using System;
 using System.Collections.Generic;
@@ -20,7 +19,7 @@ namespace SolutionShop.Application.Catalog.Products
         Task<bool> UpdatePrice(int productId, decimal newPrice);
         Task<bool> UpdateStock(int productId, int addedQuantity);
         Task AddViewCount(int productId);
-        Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
+        Task<PagedResult<ProductViewModel>> GetAllPaging(MGetProductPagingRequest request);
         Task<int> AddImage(int productId, List<IFormFile> files);
         Task<int> RemoveImages(int imageId, List<IFormFile> files);
         Task<int> UpdateImage(int imageId, string caption,bool isDefault);

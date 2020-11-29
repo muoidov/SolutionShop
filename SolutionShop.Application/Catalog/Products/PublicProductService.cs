@@ -1,5 +1,4 @@
 ﻿using SolutionShop.ViewModel.Catalog.Products;
-using SolutionShop.ViewModel.Catalog.Products.Public;
 using SolutionShop.Data.EF;
 using System;
 using System.Collections.Generic;
@@ -21,7 +20,7 @@ namespace SolutionShop.Application.Catalog.Products
         }
 
 
-        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetProductPagingRequest request)
+        public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(PGetProductPagingRequest request)
         {
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId

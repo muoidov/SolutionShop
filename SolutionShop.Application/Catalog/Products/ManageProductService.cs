@@ -3,7 +3,6 @@ using SolutionShop.ViewModel.Catalog.Products;
 using SolutionShop.Data.EF;
 using SolutionShop.Data.Entities;
 using SolutionShop.Utilities.Exceptions;
-using SolutionShop.ViewModel.Catalog.Products.Manage;
 using SolutionShop.ViewModel.Common;
 using System;
 using System.Collections.Generic;
@@ -103,7 +102,7 @@ namespace SolutionShop.Application.Catalog.Products
 
         }
 
-        public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request)
+        public async Task<PagedResult<ProductViewModel>> GetAllPaging(MGetProductPagingRequest request)
         {
             //tim kiem
             var query = from p in _context.Products
