@@ -1,5 +1,6 @@
-﻿using SolutionShop.Application.Catalog.Products.Dtos;
-using SolutionShop.Application.Catalog.Products.Dtos.Public;
+﻿
+//using SolutionShop.Application.Catalog.Products.Dtos.Mangage;
+using SolutionShop.Application.Catalog.Products.Dtos;
 using SolutionShop.Application.Dtos;
 using SolutionShop.Data.EF;
 using System;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using SolutionShop.Application.Catalog.Products.Dtos.Mangage;
 
 namespace SolutionShop.Application.Catalog.Products
 {
