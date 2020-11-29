@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SolutionShop.Data.EF;
 
 namespace SolutionShop.Data.Migrations
 {
     [DbContext(typeof(Shopdbcontext))]
-    partial class ShopdbcontextModelSnapshot : ModelSnapshot
+    [Migration("20201129145051_thaydoidodaifile")]
+    partial class thaydoidodaifile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,7 +182,7 @@ namespace SolutionShop.Data.Migrations
                         new
                         {
                             Id = new Guid("1d529fb1-5cc0-4c3b-9515-38da1dbe5fff"),
-                            ConcurrencyStamp = "6acff192-e2b9-407c-8b58-659cafd5f7fb",
+                            ConcurrencyStamp = "1ea3b69a-cb25-4292-b7e8-557bfaaed9b6",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -257,7 +259,7 @@ namespace SolutionShop.Data.Migrations
                         {
                             Id = new Guid("a694485e-a98d-42f6-84d9-c0b4c7a2f27d"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2c02dd5f-9d34-4c0c-a121-3d875fe2078a",
+                            ConcurrencyStamp = "9173d4dd-4494-4cc2-a714-4ee8248c4612",
                             Dob = new DateTime(2020, 11, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "domuoi70@gmail.com",
                             EmailConfirmed = true,
@@ -266,7 +268,7 @@ namespace SolutionShop.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "domuoi70@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMootBkLVR2JlMh3rOiS/XX9l2QLOymB6pwupBAEiFs5KHONiAqGsPnbzHZIyQS+qw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMY/E8LIiNdpaOVbVQavDE9FzTHqqjM6Goz6e1ioYN87KTNuzN5ChXqiHyiWh6BVvQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -599,7 +601,7 @@ namespace SolutionShop.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2020, 11, 29, 22, 0, 56, 16, DateTimeKind.Local).AddTicks(3685),
+                            DateCreated = new DateTime(2020, 11, 29, 21, 50, 49, 493, DateTimeKind.Local).AddTicks(2872),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,
