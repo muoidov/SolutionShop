@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SolutionShop.Application.Catalog.Manage.Products.Dtos
+namespace SolutionShop.Application.Catalog.Products.Dtos.Manage
 {
     public class ProductCreateRequest
     {

@@ -1,4 +1,4 @@
-﻿using SolutionShop.Application.Catalog.Manage.Products.Dtos;
+﻿using SolutionShop.Application.Catalog.Products.Dtos.Manage;
 using SolutionShop.Application.Catalog.Products.Dtos;
 using SolutionShop.Application.Dtos;
 using System;

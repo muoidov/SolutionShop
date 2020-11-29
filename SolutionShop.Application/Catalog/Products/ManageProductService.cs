@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SolutionShop.Application.Catalog.Manage.Products.Dtos;
+using SolutionShop.Application.Catalog.Products.Dtos.Manage;
 using SolutionShop.Application.Catalog.Products.Dtos;
 using SolutionShop.Application.Dtos;
 using SolutionShop.Data.EF;
@@ -65,7 +65,7 @@ namespace SolutionShop.Application.Catalog.Products
             var product = await _context.Products.FindAsync(productId);
             if (product == null) throw new Shopexception($"Không thể tìm thấy:{productId}");
             _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+           return await _context.SaveChangesAsync();
         }
 
         public Task<List<ProductViewModel>> GetAll()
