@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SolutionShop.Application
+namespace SolutionShop.Utilities
 {
     public class Class1
     {
