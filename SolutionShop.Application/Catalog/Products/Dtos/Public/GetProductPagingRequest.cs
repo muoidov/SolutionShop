@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SolutionShop.Application.Catalog.Products.Dtos.Mangage
+namespace SolutionShop.Application.Catalog.Products.Dtos.Public
 {
     public class GetProductPagingRequest : PagingRequestBase
     {

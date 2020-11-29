@@ -65,7 +65,7 @@ namespace SolutionShop.Application.Catalog.Products
             var product = await _context.Products.FindAsync(productId);
             if (product == null) throw new Shopexception($"Không thể tìm thấy:{productId}");
             _context.Products.Remove(product);
-           return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public Task<List<ProductViewModel>> GetAll()
