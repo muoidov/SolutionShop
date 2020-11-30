@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using SolutionShop.Application.Catalog.Products;
 using SolutionShop.Data.EF;
 using SolutionShop.Utilities.Constants;
@@ -27,12 +28,21 @@ namespace BackendApii
         // This method gets called by the runtime. Use this method to add services to  he container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
-                services.AddDbContext<Shopdbcontext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
+
+            services.AddDbContext<Shopdbcontext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
             //DI
             services.AddTransient<IPublicProductService, PublicProductService>();
+
             services.AddControllersWithViews();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "ToDo API",
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +64,14 @@ namespace BackendApii
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseEndpoints(endpoints =>
             {
