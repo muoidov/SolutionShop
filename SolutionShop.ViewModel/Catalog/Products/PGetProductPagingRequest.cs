@@ -9,6 +9,6 @@ namespace SolutionShop.ViewModel.Catalog.Products
     public class PGetProductPagingRequest : PagingRequestBase
     {
         public int? CategoryId { get; set; }
-        public string LanguageId { get; set; }
+        //public string LanguageId { get; set; }
     }
 }
