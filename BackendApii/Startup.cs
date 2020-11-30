@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SolutionShop.Application.Catalog.Products;
+using SolutionShop.Application.Common;
 using SolutionShop.Data.EF;
 using SolutionShop.Utilities.Constants;
 using System;
@@ -33,6 +34,8 @@ namespace BackendApii
                 options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
             //DI
             services.AddTransient<IPublicProductService, PublicProductService>();
+            services.AddTransient<IManageProductService, ManageProductService>();
+            services.AddTransient<IStorageService, FileStorageService>();
 
             services.AddControllersWithViews();
             services.AddSwaggerGen(c =>

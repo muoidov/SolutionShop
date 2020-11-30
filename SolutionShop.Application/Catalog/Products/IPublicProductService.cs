@@ -10,6 +10,6 @@ namespace SolutionShop.Application.Catalog.Products
     public interface IPublicProductService
     {
          public Task<PagedResult<ProductViewModel>> GetAllByCategoryId(PGetProductPagingRequest request);
-        public Task<List<ProductViewModel>> GetAll();
+        public Task<List<ProductViewModel>> GetAll(string languageId);
     }
 }
