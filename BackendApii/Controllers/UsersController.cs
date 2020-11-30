@@ -22,20 +22,22 @@ namespace BackendApii.Controllers
         }
         [HttpPost("authenticate")]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromBody]LoginRequest request)
+        public async Task<IActionResult> Authenticate([FromForm]LoginRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var rstk =await _userService.Auhthencate(request);
-            if (string.IsNullOrEmpty(rstk))
+
+            var resultToken = await _userService.Authencate(request);
+            if (string.IsNullOrEmpty(resultToken))
             {
-                return BadRequest("Mat khau or pass ko dung");
+                return BadRequest("Username or password is incorrect.");
             }
-            return Ok(new { token = rstk });
+            return Ok(new { token = resultToken });
         }
+
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody]RegisterRequest request)
+        public async Task<IActionResult> Register([FromForm]RegisterRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

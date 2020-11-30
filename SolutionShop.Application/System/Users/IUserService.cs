@@ -8,7 +8,7 @@ namespace SolutionShop.Application.System.Users
 {
     public interface IUserService
     {
-        Task<string> Auhthencate(LoginRequest request);
+        Task<string> Authencate(LoginRequest request);
         Task<bool> Register(RegisterRequest request);
     }
 }
