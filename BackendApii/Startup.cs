@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +9,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SolutionShop.Application.Catalog.Products;
 using SolutionShop.Application.Common;
+using SolutionShop.Application.System.Users;
 using SolutionShop.Data.EF;
+using SolutionShop.Data.Entities;
 using SolutionShop.Utilities.Constants;
 using System;
 using System.Collections.Generic;
@@ -33,9 +36,14 @@ namespace BackendApii
             services.AddDbContext<Shopdbcontext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
             //DI
+            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<Shopdbcontext>().AddDefaultTokenProviders();
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
+            services.AddTransient<UserManager<AppUser>,UserManager<AppUser>>();
+            services.AddTransient<SignInManager<AppUser>,SignInManager<AppUser>>();
+            services.AddTransient<RoleManager<AppRole>,RoleManager<AppRole>>();
+            services.AddTransient<IUserService,UserService>();
 
             services.AddControllersWithViews();
             services.AddSwaggerGen(c =>
