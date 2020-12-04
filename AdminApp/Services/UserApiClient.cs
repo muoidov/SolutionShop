@@ -22,7 +22,7 @@ namespace AdminApp.Services
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://locahost:5001");
-            var respone=await client.PostAsync("https://localhost:5003/api/users/authenticate",httpContent);
+            var respone=await client.PostAsync("/api/users/authenticate",httpContent);
             var token = await respone.Content.ReadAsStringAsync();
             return token;
         }
