@@ -11,6 +11,7 @@ namespace SolutionShop.ViewModel.System.Users
         {
             RuleFor(x => x.UserName).NotEmpty().WithMessage("Bat buoc nhap username");
             RuleFor(x => x.PassWord).NotEmpty().WithMessage("Bat buoc nhap pass").MinimumLength(6).WithMessage("mat khau toi thieu la 6");
+            
         }
     }
 }

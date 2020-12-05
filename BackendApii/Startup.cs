@@ -150,7 +150,7 @@ namespace BackendApii
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Homee}/{action=Index}/{id?}");
             });
         }
     }

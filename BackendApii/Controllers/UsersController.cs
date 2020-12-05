@@ -33,7 +33,7 @@ namespace BackendApii.Controllers
             {
                 return BadRequest("Username or password is incorrect.");
             }
-            return Ok(resultToken);
+            return Ok(resultToken );
         }
 
         [HttpPost]
@@ -50,7 +50,7 @@ namespace BackendApii.Controllers
             
             return Ok();
         }
-        [HttpGet("paging ")]
+        [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery]GetUserPagingRequest request)
         {
             var products = await _userService.GetUsersPaging(request);

@@ -27,7 +27,7 @@ namespace AdminApp.Services
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone=await client.PostAsync("/api/Users/authenticate",httpContent);
+            var respone=await client.PostAsync("/api/users/authenticate", httpContent);
             var token = await respone.Content.ReadAsStringAsync();
             return token;
         }
@@ -38,10 +38,22 @@ namespace AdminApp.Services
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",request.BearerToken);
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            var respone = await client.GetAsync($"/api/Users/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.KeyWord}");
+            var respone = await client.GetAsync($"/api/users/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.KeyWord}");
             var body = await respone.Content.ReadAsStringAsync();
             var user = JsonConvert.DeserializeObject<PagedResult<UserVm>>(body);
             return user;
+        }
+
+        public async Task<bool> RegisterUser(RegisterRequest registerRequest)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var json = JsonConvert.SerializeObject(registerRequest);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            
+            var respone = await client.PostAsync($"/api/users",httpContent);
+           
+            return respone.IsSuccessStatusCode;
         }
     }
 }
