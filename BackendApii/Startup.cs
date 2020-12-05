@@ -37,13 +37,14 @@ namespace BackendApii
         // This method gets called by the runtime. Use this method to add services to  he container.
         public void ConfigureServices(IServiceCollection services)
         {
+           // services.AddHttpClient();
 
             services.AddDbContext<Shopdbcontext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
             //DI
             services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<Shopdbcontext>().AddDefaultTokenProviders();
-            services.AddTransient<IPublicProductService, PublicProductService>();
-            services.AddTransient<IManageProductService, ManageProductService>();
+           
+            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();

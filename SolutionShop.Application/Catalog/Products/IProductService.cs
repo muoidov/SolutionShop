@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SolutionShop.Application.Catalog.Products
 {
-    public interface IManageProductService
+    public interface IProductService
     {//quan ly san pham
         //uu diem cua no la co the trien khai DI
         //tao logic them sua xoa
@@ -28,6 +28,6 @@ namespace SolutionShop.Application.Catalog.Products
         Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request);
         Task<List<ProductImageViewModel>> GetListImages(int productId);
         Task<ProductImageViewModel> GetImageById(int imageId);
-
+        public Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, PGetProductPagingRequest request);
     }
 }

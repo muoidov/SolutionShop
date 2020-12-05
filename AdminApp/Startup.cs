@@ -28,6 +28,7 @@ namespace AdminApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
+            services.AddSession();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(options =>
                {
@@ -62,11 +63,13 @@ namespace AdminApp
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             app.UseAuthentication();
+
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

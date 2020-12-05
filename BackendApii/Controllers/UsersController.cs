@@ -12,6 +12,7 @@ namespace BackendApii.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -32,10 +33,10 @@ namespace BackendApii.Controllers
             {
                 return BadRequest("Username or password is incorrect.");
             }
-            return Ok(new { resultToken });
+            return Ok(resultToken);
         }
 
-        [HttpPost("register")]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody]RegisterRequest request)
         {
@@ -46,7 +47,14 @@ namespace BackendApii.Controllers
             {
                 return BadRequest("Dang k ko thanh cong");
             }
+            
             return Ok();
+        }
+        [HttpGet("paging ")]
+        public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery]GetUserPagingRequest request)
+        {
+            var products = await _userService.GetUsersPaging(request);
+            return Ok(products);
         }
     }
 }

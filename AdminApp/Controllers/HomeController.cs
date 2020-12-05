@@ -23,7 +23,7 @@ namespace AdminApp.Controllers
         public IActionResult Index()
         {
             var user = User.Identity.Name;
-            return View();
+            return View(); 
         }
 
         public IActionResult Privacy()

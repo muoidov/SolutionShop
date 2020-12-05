@@ -17,33 +17,25 @@ namespace BackendApii.Controllers
     [Authorize]
     public class ProductsController : ControllerBase
     {
-        private readonly IPublicProductService _publicProductService1;
-        private readonly IManageProductService _publicManageService1;
-        public ProductsController(IPublicProductService publicProductService,IManageProductService manageProductService)
+        private readonly IProductService _iproductService;
+        private readonly ProductService _productService;
+        public ProductsController(IProductService IProductService,ProductService   ProductService)
         {
-            _publicProductService1 = publicProductService;
-            _publicManageService1 = manageProductService;
+            _iproductService = IProductService;
+            _productService = ProductService;
         }
-        // GET: api/<ProductController>
-        //[HttpGet("{languageId}")] 
-        //public async Task<IActionResult> GetAll(string languageId)
-        //{
-        //    var products = await _publicProductService1.GetAll(languageId);
-        //    return Ok(products);
-        //}
-
-        // GET api/<ProductController>/5
+        
         [HttpGet("{languageId}")]
         public async Task<IActionResult> GetAllPaging(string languageId,[FromQuery]PGetProductPagingRequest request)
         {
-            var products = await _publicProductService1.GetAllByCategoryId(languageId,request);
+            var products = await _productService.GetAllByCategoryId(languageId,request);
             return Ok(products);
         }
 
         [HttpGet("{productId}/{languageId}")]
         public async Task<IActionResult> GetById(int productId,string languageId)
         {
-            var product = await _publicManageService1.GetById(productId,languageId);
+            var product = await _iproductService.GetById(productId,languageId);
             if (product == null)
                 return BadRequest("Ko tim thay product");
             return Ok(product);
@@ -57,10 +49,10 @@ namespace BackendApii.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var products = await _publicManageService1.Create(request);
+            var products = await _iproductService.Create(request);
             if (products == 0)
                  return BadRequest();
-            var product = await _publicManageService1.GetById(products,request.LanguageId);
+            var product = await _productService.GetById(products,request.LanguageId);
             return CreatedAtAction(nameof(GetById),new { id=products},product);
         }
 
@@ -68,7 +60,7 @@ namespace BackendApii.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromForm]ProductUpdateRequest request)
         {
-            var affectrs = await _publicManageService1.Update(request);
+            var affectrs = await _iproductService.Update(request);
             if (affectrs == 0)
                 return BadRequest();
             return Ok();
@@ -78,7 +70,7 @@ namespace BackendApii.Controllers
         [HttpDelete("{productId}")]
         public async Task<IActionResult> Delete(int productId)
         {
-            var affectrs = await _publicManageService1.Delete(productId);
+            var affectrs = await _iproductService.Delete(productId);
             if (affectrs == 0)
                 return BadRequest();
             return Ok();
@@ -87,7 +79,7 @@ namespace BackendApii.Controllers
         [HttpPatch("price/{productId}/{newPrice}")]
         public async Task<IActionResult> UpdatePrice(int productId,decimal newPrice)
         {
-            var isSuccess= await _publicManageService1.UpdatePrice(productId,newPrice);
+            var isSuccess= await _iproductService.UpdatePrice(productId,newPrice);
             if (isSuccess)   
             return Ok();
             return BadRequest();
@@ -100,10 +92,10 @@ namespace BackendApii.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var imageId = await _publicManageService1.AddImage(productId,request);
+            var imageId = await _iproductService.AddImage(productId,request);
             if (imageId == 0)
                 return BadRequest();
-            var image = await _publicManageService1.GetImageById(imageId);
+            var image = await _iproductService.GetImageById(imageId);
             return CreatedAtAction(nameof(GetImageById), new { id = imageId }, image);
         }
         [HttpPut("{productId}/images/{imageId}")]
@@ -113,7 +105,7 @@ namespace BackendApii.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var rs = await _publicManageService1.UpdateImage(imageId, request);
+            var rs = await _iproductService.UpdateImage(imageId, request);
             if (rs == 0)
                 return BadRequest();
 
@@ -126,7 +118,7 @@ namespace BackendApii.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var rs = await _publicManageService1.RemoveImages(imageId);
+            var rs = await _iproductService.RemoveImages(imageId);
             if (rs == 0)
                 return BadRequest();
 
@@ -136,7 +128,7 @@ namespace BackendApii.Controllers
         [HttpGet("{productId}/image/{imageId}")]
         public async Task<IActionResult> GetImageById(int productId, int imageId)
         {
-            var image = await _publicManageService1.GetImageById(imageId);
+            var image = await _iproductService.GetImageById(imageId);
             if (image == null)
                 return BadRequest("Ko tim thay product");
             return Ok(image);
