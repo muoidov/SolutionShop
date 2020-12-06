@@ -38,8 +38,12 @@ namespace AdminApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(ModelState);
-
             var rs= await _userApiClient.Authenticate(request);
+            if (rs.Result == null)
+            {
+                ModelState.AddModelError("", rs.Message);
+                return View();
+            }
             var userPrincipal = this.ValidateToken(rs.Result);
             var authProperties = new AuthenticationProperties
             {

@@ -4,15 +4,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
 using SolutionShop.ViewModel.System.Users;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AdminApp.Controllers
@@ -38,7 +31,7 @@ namespace AdminApp.Controllers
                 PageSize = ps
             };
             var data = await _userApiClient.GetUsersPagings(request);
-
+            ViewBag.Keyword = kw;
             return View(data.Result);
         }
         [HttpGet]
@@ -122,7 +115,7 @@ namespace AdminApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "User");
+            return RedirectToAction("Index", "Login");
         }
         //chua thong tin dang nhap
        

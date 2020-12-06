@@ -38,7 +38,7 @@ namespace SolutionShop.Application.System.Users
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
 
-            if (user == null) return null;
+            if (user == null) return new ApiError<string>("Tài khoản ko tồn tại");
             //throw new Shopexception("Not user name");
 
             var rs = await _signInManager.PasswordSignInAsync(user, request.PassWord, request.RememberMe, true);
