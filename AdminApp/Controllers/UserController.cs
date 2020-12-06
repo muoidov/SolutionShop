@@ -32,14 +32,14 @@ namespace AdminApp.Controllers
             var sessions = HttpContext.Session.GetString("Token");
             var request = new GetUserPagingRequest()
             {
-                BearerToken = sessions,
+                
                 KeyWord = kw,
                 PageIndex = pi,
                 PageSize = ps
             };
             var data = await _userApiClient.GetUsersPagings(request);
 
-            return View(data);
+            return View(data.Result);
         }
         [HttpGet]
         public  IActionResult Create()
@@ -53,12 +53,45 @@ namespace AdminApp.Controllers
             if (!ModelState.IsValid)
                 return View();
             var rs = await _userApiClient.RegisterUser(request);
-            if (rs)
+            if (rs.IsSuccessed)
                 return RedirectToAction("Index");
+            ModelState.AddModelError("", rs.Message);
+
             return View(request);
         }
+
         [HttpGet]
-       
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var rs = await _userApiClient.GetById(id);
+            if (rs.IsSuccessed) {
+                var user = rs.Result;
+                var updateRequest = new UserUpdateRequest()
+                {
+                    Dob = user.Dob,
+                Email=user.Email,
+                LastName=user.LastName,
+                FirstName=user.FirstName,
+                PhoneNumber=user.PhoneNumber,
+                Id=user.Id};
+                return View(updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var rs = await _userApiClient.UpdateUser(request.Id,request);
+            if (rs.IsSuccessed)
+                return RedirectToAction("Index");
+            ModelState.AddModelError("", rs.Message);
+
+            return View(request);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Logout()
         {

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -23,17 +25,19 @@ namespace SolutionShop.Application.System.Users
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _config;
-
+        
         public UserService(UserManager<AppUser> userManage,SignInManager<AppUser> signInManage,RoleManager<AppRole> roleManager,IConfiguration config)
         {
             _userManager = userManage;
             _signInManager = signInManage;
             _roleManager = roleManager;
             _config = config;
+           
         }
-        public async Task<string> Authencate(LoginRequest request)
+        public async Task<ApiResult<string>> Authencate(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
+
             if (user == null) return null;
             //throw new Shopexception("Not user name");
 
@@ -54,17 +58,15 @@ namespace SolutionShop.Application.System.Users
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var token = new JwtSecurityToken(_config["Tokens:Issuer"],
-            _config["Tokens:Issuer"],
-            claims,
-            expires: DateTime.Now.AddHours(3),
-            signingCredentials: creds);
+            var token = new JwtSecurityToken(_config["Tokens:Issuer"],
+                _config["Tokens:Issuer"],
+                claims,
+                expires: DateTime.Now.AddHours(3),
+                signingCredentials: creds);
+            return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
+        }
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
-
-    }
-
-        public async Task<PagedResult<UserVm>> GetUsersPaging(GetUserPagingRequest request)
+        public async Task<ApiResult<PagedResult<UserVm>>>GetUsersPaging(GetUserPagingRequest request)
         {
             var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.KeyWord))
@@ -85,17 +87,27 @@ namespace SolutionShop.Application.System.Users
             }).ToListAsync();
             //chon project
 
-            var pageResult = new PagedResult<UserVm>()
+            var pagedResult = new PagedResult<UserVm>()
             {
                 TotalRecord = totalRow,
                 Items = data
             };
-            return pageResult;
+            return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
         }
 
-        public async Task<bool> Register(RegisterRequest request)
+        public async Task<ApiResult<bool>> Register(RegisterRequest request)
         {
-            var user = new AppUser()
+            var user = await _userManager.FindByNameAsync(request.UserName);
+            if (user != null)
+            {
+                return new ApiError<bool>("Tài khoản đã tồn tại");
+            }
+            if (await _userManager.FindByEmailAsync(request.Email) != null)
+            {
+                return new ApiError<bool>("Emai đã tồn tại");
+            }
+
+            user = new AppUser()
             {
                 Dob = request.Dob,
                 Email = request.Email,
@@ -104,15 +116,55 @@ namespace SolutionShop.Application.System.Users
                 UserName = request.UserName,
                 PhoneNumber = request.PhoneNumber
             };
-            var rs = await _userManager.CreateAsync(user, request.PassWord);
-            if (rs.Succeeded)
+            var result = await _userManager.CreateAsync(user, request.PassWord);
+            if (result.Succeeded)
             {
-                return true;
+                return new ApiSuccessResult<bool>();
             }
-            else
+            return new ApiError<bool>("Đăng ký không thành công");
+        }
+
+        public async Task<ApiResult<bool>> Update(Guid id,UserUpdateRequest request)
+        {
+
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
+            {
+                return new ApiError<bool>("Emai đã tồn tại");
+            }
+            var user = await _userManager.FindByNameAsync(id.ToString());
+
+
+            user.Dob = request.Dob;
+            user.Email = request.Email;
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.PhoneNumber = request.PhoneNumber;
             
-                return false;
-            
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiError<bool>("Update o thanh cong");
+        }
+        public async Task<ApiResult<UserVm>> GetById(Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user != null)
+            {
+                return new ApiError<UserVm>("User o ton tai");
+
+            }
+            var userVm = new UserVm()
+            {
+                Dob = user.Dob,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Id=user.Id,
+                PhoneNumber = user.PhoneNumber
+            };
+            return new ApiSuccessResult<UserVm>(userVm); 
         }
     }
 }

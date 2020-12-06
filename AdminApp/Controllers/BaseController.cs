@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,11 @@ using System.Threading.Tasks;
 
 namespace AdminApp.Controllers
 {
+   [Authorize]
     public class BaseController : Controller
-    {public BaseController()
-        {
-            
-            
-        }
+    {
+        
+        
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var sessions = context.HttpContext.Session.GetString("Token");

@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +29,7 @@ namespace AdminApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
-            services.AddSession();
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(options =>
                {
@@ -36,8 +37,13 @@ namespace AdminApp
                    options.AccessDeniedPath = "/User/Forbidden/";
                });
             services.AddControllersWithViews()
-                .AddFluentValidation(fv=> fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserApiClient, UserApiClient>();
+            services.AddSession(op =>
+            {
+                op.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
             IMvcBuilder builder = services.AddRazorPages();
             var envrm = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 #if DEBUG

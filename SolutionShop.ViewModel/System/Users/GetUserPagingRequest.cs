@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SolutionShop.ViewModel.System.Users
 {
-    public class GetUserPagingRequest:PagingRequestBase
+    public class GetUserPagingRequest :PagingRequestBase
     {
         public string KeyWord { get; set; }
     }

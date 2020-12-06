@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace AdminApp.Controllers
 {
-    [Authorize]
-    public class HomeController : Controller 
+    //[Authorize]
+    public class HomeController : BaseController 
     {
         private readonly ILogger<HomeController> _logger;
 
