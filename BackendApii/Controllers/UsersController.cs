@@ -55,7 +55,7 @@ namespace BackendApii.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id,[FromBody]UserUpdateRequest request)
         {
-            if (!ModelState.IsValid)
+                if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var rs = await _userService.Update(id,request);
             if (!rs.IsSuccessed)

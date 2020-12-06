@@ -66,7 +66,7 @@ namespace SolutionShop.Application.System.Users
             return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
-        public async Task<ApiResult<PagedResult<UserVm>>>GetUsersPaging(GetUserPagingRequest request)
+        public async Task<ApiResult<PagedResult<UserVm>>> GetUsersPaging(GetUserPagingRequest request)
         {
             var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.KeyWord))
@@ -75,8 +75,10 @@ namespace SolutionShop.Application.System.Users
                   (request.KeyWord));
             }
             int totalRow = await query.CountAsync();
-
-            var data = await query.Skip(request.PageIndex - 1 * request.PageSize).Take(request.PageSize).Select(x => new UserVm()
+            //.Skip((request.PageIndex - 1) * request.PageSize)
+               // .Take(request.PageSize)
+            var data = await query
+                .Select(x => new UserVm()
             {
                Email=x.Email,
                PhoneNumber=x.PhoneNumber,
@@ -134,7 +136,7 @@ namespace SolutionShop.Application.System.Users
             {
                 return new ApiError<bool>("Emai đã tồn tại");
             }
-            var user = await _userManager.FindByNameAsync(id.ToString());
+            var user = await _userManager.FindByIdAsync(id.ToString());
 
 
             user.Dob = request.Dob;
@@ -149,11 +151,12 @@ namespace SolutionShop.Application.System.Users
                 return new ApiSuccessResult<bool>();
             }
             return new ApiError<bool>("Update o thanh cong");
+
         }
         public async Task<ApiResult<UserVm>> GetById(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user != null)
+            if (user == null)
             {
                 return new ApiError<UserVm>("User o ton tai");
 
@@ -175,7 +178,7 @@ namespace SolutionShop.Application.System.Users
         {
 
             var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user != null)
+            if (user == null)
             {
                 return new ApiError<bool>("User o ton tai");
 

@@ -67,15 +67,16 @@ namespace AdminApp.Services
 
         public async Task<ApiResult<PagedResult<UserVm>>> GetUsersPagings(GetUserPagingRequest request)
         {
-            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var client = _httpClientFactory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",sessions);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
             var response = await client.GetAsync($"/api/Users/paging?pageIndex=" +
                 $"{request.PageIndex}&pageSize={request.PageSize}&keyword={request.KeyWord}");
             var body = await response.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<ApiResult<PagedResult<UserVm>>>(body);
-            return user;
+            var users = JsonConvert.DeserializeObject<ApiSuccessResult<PagedResult<UserVm>>>(body);
+            return users;
         }
 
         public async Task<ApiResult<bool>> RegisterUser(RegisterRequest registerRequest)
@@ -85,7 +86,7 @@ namespace AdminApp.Services
             var json = JsonConvert.SerializeObject(registerRequest);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             
-            var respone = await client.PostAsync($"/api/users",httpContent);
+            var respone = await client.PostAsync($"/api/Users",httpContent);
             var rs = await respone.Content.ReadAsStringAsync();
             if (respone.IsSuccessStatusCode)
             {
@@ -94,24 +95,20 @@ namespace AdminApp.Services
             return JsonConvert.DeserializeObject<ApiError<bool>>(rs);
         }
 
-        public async Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest registerRequest)
+        public async Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request)
         {
-            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var client = _httpClientFactory.CreateClient();
-            
-           
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
-            var json = JsonConvert.SerializeObject(registerRequest);
+            var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PutAsync($"/api/Users/{id}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
 
-            var respone = await client.PutAsync($"/api/users/{id}", httpContent);
-            var rs = await respone.Content.ReadAsStringAsync();
-            if (respone.IsSuccessStatusCode)
-            {
-                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(rs);
-            }
-            return JsonConvert.DeserializeObject<ApiError<bool>>(rs);
+            return JsonConvert.DeserializeObject<ApiError<bool>>(result);
         }
     }
 }

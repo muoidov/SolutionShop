@@ -12,7 +12,7 @@
     </ol>
     <div class="card mb-4">
         <div class="card-header">
-            <div><a asp-action="Index" asp-controller="User" class="btn btn-success">Return Index</a></div>
+            <div><a asp-action="Index" asp-controller="User" class="btn btn-success">Về danh sách</a></div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -25,12 +25,10 @@
                             @Html.DisplayFor(model => model.Id)
                         </dd>
                     </dl>
-
                     <form asp-action="Delete">
-
                         <input asp-for="Id" type="hidden" />
                         <input type="submit" value="Delete" class="btn btn-danger" /> |
-                        <a asp-action="Index">Back to List</a>
+                 
                     </form>
                 </div>
             </div>

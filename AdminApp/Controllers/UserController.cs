@@ -20,7 +20,7 @@ namespace AdminApp.Controllers
             _userApiClient = userApiClient;
             _configuration = configuration;
         }
-        public async Task<IActionResult> Index(string kw, int pi = 1, int ps = 1)
+        public async Task<IActionResult> Index(string kw, int pi = 1, int ps = 10)
         {
             var sessions = HttpContext.Session.GetString("Token");
             var request = new GetUserPagingRequest()
@@ -87,7 +87,7 @@ namespace AdminApp.Controllers
                 var user = rs.Result;
                 var updateRequest = new UserUpdateRequest()
                 {
-                    Dob = user.Dob,
+                Dob = user.Dob,
                 Email=user.Email,
                 LastName=user.LastName,
                 FirstName=user.FirstName,
