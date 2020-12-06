@@ -160,8 +160,10 @@ namespace SolutionShop.Application.Catalog.Products
 
             var pageResult = new PagedResult<ProductViewModel>()
             {
-                TotalRecord = totalRow,
-                Items = data
+                TotalRecords = totalRow,
+                Items = data,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
             };
             return pageResult;
 
@@ -344,8 +346,10 @@ namespace SolutionShop.Application.Catalog.Products
 
             var pageResult = new PagedResult<ProductViewModel>()
             {
-                TotalRecord = totalRow,
-                Items = data
+                TotalRecords= totalRow,
+                Items = data,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
             };
             return pageResult;
 

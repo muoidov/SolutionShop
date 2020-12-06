@@ -27,7 +27,7 @@ namespace AdminApp.Controllers
             _userApiClient = userApiClient;
             _configuration = configuration;
         }
-        public async Task<IActionResult> Index(string kw, int pi = 1, int ps = 10)
+        public async Task<IActionResult> Index(string kw, int pi = 1, int ps = 1)
         {
             var sessions = HttpContext.Session.GetString("Token");
             var request = new GetUserPagingRequest()
@@ -40,6 +40,12 @@ namespace AdminApp.Controllers
             var data = await _userApiClient.GetUsersPagings(request);
 
             return View(data.Result);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var rs = await _userApiClient.GetById(id);
+            return View(rs.Result);
         }
         [HttpGet]
         public  IActionResult Create()

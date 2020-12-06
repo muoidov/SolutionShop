@@ -89,8 +89,11 @@ namespace SolutionShop.Application.System.Users
 
             var pagedResult = new PagedResult<UserVm>()
             {
-                TotalRecord = totalRow,
-                Items = data
+                TotalRecords = totalRow,
+                Items = data,
+                PageIndex=request.PageIndex,
+                PageSize=request.PageSize,
+
             };
             return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
         }
@@ -162,7 +165,8 @@ namespace SolutionShop.Application.System.Users
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Id=user.Id,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                UserName=user.UserName
             };
             return new ApiSuccessResult<UserVm>(userVm); 
         }
