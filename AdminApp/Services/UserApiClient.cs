@@ -39,6 +39,19 @@ namespace AdminApp.Services
             
         }
 
+        public async Task<ApiResult<bool>> Delete(Guid id)
+        {
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var respone = await client.DeleteAsync($"/api/users/{id}");
+            var body = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(body);
+            return JsonConvert.DeserializeObject<ApiError<bool>>(body);
+        }
+
         public async Task<ApiResult<UserVm>> GetById(Guid id)
         {
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");

@@ -170,5 +170,20 @@ namespace SolutionShop.Application.System.Users
             };
             return new ApiSuccessResult<UserVm>(userVm); 
         }
+
+        public async Task<ApiResult<bool>> Delete(Guid id)
+        {
+
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user != null)
+            {
+                return new ApiError<bool>("User o ton tai");
+
+            }
+            var rs=await _userManager.DeleteAsync(user);
+            if(rs.Succeeded)
+            return new ApiSuccessResult<bool>();
+            return new ApiError<bool>("Ko xóa được");
+    }
     }
 }

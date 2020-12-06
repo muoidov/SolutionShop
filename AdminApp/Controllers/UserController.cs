@@ -53,6 +53,26 @@ namespace AdminApp.Controllers
             
             return View();
         }
+        [HttpGet]
+        public IActionResult Delete(Guid id)
+        {
+
+            return View(new UserDeleteRequest()
+            {Id=id
+            });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(UserDeleteRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var rs = await _userApiClient.Delete(request.Id);
+            if (rs.IsSuccessed)
+                return RedirectToAction("Index");
+            ModelState.AddModelError("", rs.Message);
+
+            return View(request);
+        }
         [HttpPost]
         public async Task<IActionResult> Create(RegisterRequest request)
         {
