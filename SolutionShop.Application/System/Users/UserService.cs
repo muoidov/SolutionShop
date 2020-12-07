@@ -76,8 +76,8 @@ namespace SolutionShop.Application.System.Users
             }
             int totalRow = await query.CountAsync();
             //.Skip((request.PageIndex - 1) * request.PageSize)
-               // .Take(request.PageSize)
-            var data = await query
+               // 
+            var data = await query.Take(request.PageSize)
                 .Select(x => new UserVm()
             {
                Email=x.Email,

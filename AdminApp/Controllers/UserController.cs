@@ -32,6 +32,10 @@ namespace AdminApp.Controllers
             };
             var data = await _userApiClient.GetUsersPagings(request);
             ViewBag.Keyword = kw;
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
             return View(data.Result);
         }
         [HttpGet]
@@ -61,7 +65,10 @@ namespace AdminApp.Controllers
                 return View();
             var rs = await _userApiClient.Delete(request.Id);
             if (rs.IsSuccessed)
+            {
+                TempData["result"] = "Xóa thành công";
                 return RedirectToAction("Index");
+            }
             ModelState.AddModelError("", rs.Message);
 
             return View(request);
@@ -73,7 +80,10 @@ namespace AdminApp.Controllers
                 return View();
             var rs = await _userApiClient.RegisterUser(request);
             if (rs.IsSuccessed)
+            {
+                TempData["result"] = "Tạo thành công";
                 return RedirectToAction("Index");
+            }
             ModelState.AddModelError("", rs.Message);
 
             return View(request);
@@ -104,7 +114,10 @@ namespace AdminApp.Controllers
                 return View();
             var rs = await _userApiClient.UpdateUser(request.Id,request);
             if (rs.IsSuccessed)
+            {
+                TempData["result"] = "Cập nhật người dùng thành công";
                 return RedirectToAction("Index");
+            }
             ModelState.AddModelError("", rs.Message);
 
             return View(request);
