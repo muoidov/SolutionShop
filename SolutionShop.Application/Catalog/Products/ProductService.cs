@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿//using Microsoft.EntityFrameworkCore;
 using SolutionShop.ViewModel.Catalog.ProductImages;
 using SolutionShop.Data.EF;
 using SolutionShop.Data.Entities;
@@ -7,13 +7,13 @@ using SolutionShop.ViewModel.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http.Headers;
 using System.IO;
 using SolutionShop.Application.Common;
 using SolutionShop.ViewModel.Catalog.Products;
+using Microsoft.EntityFrameworkCore;
 
 namespace SolutionShop.Application.Catalog.Products
 {
@@ -48,7 +48,7 @@ namespace SolutionShop.Application.Catalog.Products
 
             }
             _context.ProductImages.Add(productImage);
-             await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return productImage.Id;
         }
 
@@ -124,48 +124,52 @@ namespace SolutionShop.Application.Catalog.Products
 
         public async Task<PagedResult<ProductViewModel>> GetAllPaging(MGetProductPagingRequest request)
         {
-            //tim kiem
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId
                         join c in _context.Categories on pic.CategoryId equals c.Id
+                        where pt.LanguageId == request.LanguageId
                         select new { p, pt, pic };
-            //loc
+            //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
                 query = query.Where(x => x.pt.Name.Contains(request.Keyword));
 
-            if (request.CategoryIds.Count > 0)
+            if (request.CategoryIds != null && request.CategoryIds.Count > 0)
             {
                 query = query.Where(p => request.CategoryIds.Contains(p.pic.CategoryId));
             }
-            //paging
+
+            //3. Paging
             int totalRow = await query.CountAsync();
+           // .Skip((request.PageIndex - 1) * request.PageSize)
+            var data = await query
+                .Take(request.PageSize)
+                .Select(x => new ProductViewModel()
+                {
+                    Id = x.p.Id,
+                    Name = x.pt.Name,
+                    DateCreated = x.p.DateCreated,
+                    Description = x.pt.Description,
+                    Details = x.pt.Details,
+                    LanguageId = x.pt.LanguageId,
+                    OriginalPrice = x.p.OriginalPrice,
+                    Price = x.p.Price,
+                    SeoAlias = x.pt.SeoAlias,
+                    SeoDescription = x.pt.SeoDescription,
+                    SeoTitle = x.pt.SeoTitle,
+                    Stock = x.p.Stock,
+                    ViewCount = x.p.ViewCount
+                }).ToListAsync();
 
-            var data = await query.Skip(request.PageIndex - 1 * request.PageSize).Take(request.PageSize).Select(x => new ProductViewModel()
-            {
-                Id = x.p.Id,
-                Name = x.pt.Name,
-                DateCreated = x.p.DateCreated,
-                Description = x.pt.Description,
-                LanguageId = x.pt.LanguageId,
-                OriginalPrice = x.p.OriginalPrice,
-                Price = x.p.Price,
-                SeoAlias = x.pt.SeoAlias,
-                SeoDescription = x.pt.SeoDescription,
-                SeoTitle = x.pt.SeoDescription,
-                Stock = x.p.Stock,
-                ViewCount = x.p.ViewCount
-            }).ToListAsync();
-            //chon project
-
-            var pageResult = new PagedResult<ProductViewModel>()
+            //4. Select and projection
+            var pagedResult = new PagedResult<ProductViewModel>()
             {
                 TotalRecords = totalRow,
-                Items = data,
+                PageSize = request.PageSize,
                 PageIndex = request.PageIndex,
-                PageSize = request.PageSize
+                Items = data
             };
-            return pageResult;
+            return pagedResult;
 
         }
 
@@ -198,7 +202,7 @@ namespace SolutionShop.Application.Catalog.Products
             var image = await _context.ProductImages.FindAsync(imageId);
             if (image == null)
                 throw new Shopexception($"Ko tim thay id{imageId}");
-            var viewModel=new ProductImageViewModel()
+            var viewModel = new ProductImageViewModel()
             {
                 Caption = image.Caption,
                 DateCreated = image.DateCreated,
@@ -229,7 +233,7 @@ namespace SolutionShop.Application.Catalog.Products
             }).ToListAsync();
         }
 
-        
+
 
         public async Task<int> RemoveImages(int imageId)
         {
@@ -270,7 +274,7 @@ namespace SolutionShop.Application.Catalog.Products
 
         }
 
-        public async Task<int> UpdateImage( int imageId, ProductImageUpdateRequest request)
+        public async Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request)
         {
             var productImage = await _context.ProductImages.FindAsync(imageId);
             if (productImage == null)
@@ -286,7 +290,7 @@ namespace SolutionShop.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        
+
 
         public async Task<bool> UpdatePrice(int productId, decimal newPrice)
         {
@@ -346,7 +350,7 @@ namespace SolutionShop.Application.Catalog.Products
 
             var pageResult = new PagedResult<ProductViewModel>()
             {
-                TotalRecords= totalRow,
+                TotalRecords = totalRow,
                 Items = data,
                 PageIndex = request.PageIndex,
                 PageSize = request.PageSize

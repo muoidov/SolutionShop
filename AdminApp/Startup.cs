@@ -42,6 +42,7 @@ namespace AdminApp
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<IRoleApiClient, RoleApiClient>();
             services.AddTransient<ILanguageApiClient, LanguageApiClient>();
+            services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddSession(op =>
             {
                 op.IdleTimeout = TimeSpan.FromMinutes(30);

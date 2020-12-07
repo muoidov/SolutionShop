@@ -132,23 +132,6 @@ namespace AdminApp.Controllers
             var roleAssignRequest = await GetRoleAssignRequest(id);
             return View(roleAssignRequest);
         }
-        //[HttpGet]
-        //public async Task<IActionResult> RoleAsign(Guid id)
-        //{
-        //    var rs = await _userApiClient.GetById(id);
-        //    var role = await _roleApiClient.GetAll();
-        //    var roleAsignRequest = new RoleAsignRequest();
-        //    foreach(var roleName in role.Result)
-        //    {
-        //        roleAsignRequest.Roles.Add(new SelectItem()
-        //        {
-        //            Id =roleName.Id.ToString(),
-        //            Name=roleName.Name,
-        //            Selected=rs.Result.Roles.Contains(roleName.Name)
-        //        });
-        //    }
-        //    return View(roleAsignRequest);
-        //}
         [HttpPost]
         public async Task<IActionResult> RoleAsign(RoleAsignRequest request)
         {
