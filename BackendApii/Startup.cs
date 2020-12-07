@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SolutionShop.Application.Catalog.Products;
 using SolutionShop.Application.Common;
+using SolutionShop.Application.System.Roles;
 using SolutionShop.Application.System.Users;
 using SolutionShop.Data.EF;
 using SolutionShop.Data.Entities;
@@ -49,6 +50,7 @@ namespace BackendApii
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
+            services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();

@@ -65,6 +65,19 @@ namespace BackendApii.Controllers
 
             return Ok(rs);
         }
+        [HttpPut("{id}/roles")]
+        public async Task<IActionResult> RoleAsign(Guid id, [FromBody]RoleAsignRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var rs = await _userService.RoleAsign(id, request);
+            if (!rs.IsSuccessed)
+            {
+                return BadRequest(rs);
+            }
+
+            return Ok(rs);
+        }
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery]GetUserPagingRequest request)
         {

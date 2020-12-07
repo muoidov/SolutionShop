@@ -161,6 +161,7 @@ namespace SolutionShop.Application.System.Users
                 return new ApiError<UserVm>("User o ton tai");
 
             }
+            var roles = await _userManager.GetRolesAsync(user);
             var userVm = new UserVm()
             {
                 Dob = user.Dob,
@@ -169,7 +170,8 @@ namespace SolutionShop.Application.System.Users
                 LastName = user.LastName,
                 Id=user.Id,
                 PhoneNumber = user.PhoneNumber,
-                UserName=user.UserName
+                UserName=user.UserName,
+                Roles=roles
             };
             return new ApiSuccessResult<UserVm>(userVm); 
         }
@@ -188,5 +190,33 @@ namespace SolutionShop.Application.System.Users
             return new ApiSuccessResult<bool>();
             return new ApiError<bool>("Ko xóa được");
     }
+
+
+        public async Task<ApiResult<bool>> RoleAsign(Guid id, RoleAsignRequest request)    
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiError<bool>("Tài khoản không tồn tại");
+            }
+            var removedRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
+            foreach (var roleName in removedRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, roleName) == true)
+                {
+                    await _userManager.RemoveFromRoleAsync(user, roleName);
+                }
+            }
+            await _userManager.RemoveFromRolesAsync(user, removedRoles);
+            var addedRoles = request.Roles.Where(x => x.Selected).Select(x => x.Name).ToList();
+            foreach (var roleName in addedRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, roleName) == false)
+                {
+                    await _userManager.AddToRoleAsync(user, roleName);
+                }
+            }
+            return new ApiSuccessResult<bool>();
+        }
     }
 }

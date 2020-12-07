@@ -40,6 +40,7 @@ namespace AdminApp
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserApiClient, UserApiClient>();
+            services.AddTransient<IRoleApiClient, RoleApiClient>();
             services.AddSession(op =>
             {
                 op.IdleTimeout = TimeSpan.FromMinutes(30);
