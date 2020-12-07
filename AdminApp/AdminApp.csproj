@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BackendApii\BackendApii.csproj" />
     <ProjectReference Include="..\SolutionShop.Application\SolutionShop.Application.csproj" />
+    <ProjectReference Include="..\SolutionShop.Utilities\SolutionShop.Utilities.csproj" />
     <ProjectReference Include="..\SolutionShop.ViewModel\SolutionShop.ViewModel.csproj" />
   </ItemGroup>
 
