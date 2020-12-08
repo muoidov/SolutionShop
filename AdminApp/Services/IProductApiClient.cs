@@ -11,5 +11,6 @@ namespace AdminApp.Services
     public interface IProductApiClient
     {
         Task<PagedResult<ProductViewModel>> GetPagings(MGetProductPagingRequest request);
+        Task<bool> CreateProduct(ProductCreateRequest request);
     }
 }
