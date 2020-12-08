@@ -59,7 +59,7 @@ namespace AdminApp.Controllers
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Thêm sản phẩm thất bại");
-            return View();
+            return View(request);
         }
 
     }

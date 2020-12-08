@@ -47,7 +47,7 @@ namespace AdminApp.Services
                     data = br.ReadBytes((int)request.ThumbnailImage.OpenReadStream().Length);
                 }
                 ByteArrayContent bytes = new ByteArrayContent(data);
-                requestContent.Add(bytes, "thumbnails", request.ThumbnailImage.FileName);
+                requestContent.Add(bytes, "thumbnailImage", request.ThumbnailImage.FileName);
             }
             requestContent.Add(new StringContent(request.Price.ToString()), "price");
             requestContent.Add(new StringContent(request.OriginalPrice.ToString()), "originalPrice");
@@ -55,12 +55,12 @@ namespace AdminApp.Services
             requestContent.Add(new StringContent(request.Name.ToString()), "name");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
             requestContent.Add(new StringContent(request.Details.ToString()), "details");
-            requestContent.Add(new StringContent(request.SeoAlias.ToString()), "seoalias");
-            requestContent.Add(new StringContent(request.SeoDescription.ToString()), "seodescription");
-            requestContent.Add(new StringContent(request.SeoTitle.ToString()), "seotitle");
-            requestContent.Add(new StringContent(LanguageId), "LanguageId");
+            requestContent.Add(new StringContent(request.SeoAlias.ToString()), "seoAlias");
+            requestContent.Add(new StringContent(request.SeoDescription.ToString()), "seoDescription");
+            requestContent.Add(new StringContent(request.SeoTitle.ToString()), "seoTitle");
+            requestContent.Add(new StringContent(LanguageId), "languageId");
             //requestContent.Add(new StringContent(request.LanguageId.ToString()), "languageid");
-            var response = await client.PostAsync($"/api/Products", requestContent);
+            var response = await client.PostAsync($"/api/Products/", requestContent);
             return response.IsSuccessStatusCode;
         }
 

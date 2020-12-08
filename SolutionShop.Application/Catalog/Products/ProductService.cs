@@ -141,9 +141,8 @@ namespace SolutionShop.Application.Catalog.Products
 
             //3. Paging
             int totalRow = await query.CountAsync();
-           // .Skip((request.PageIndex - 1) * request.PageSize)
+            // .Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
             var data = await query
-                .Take(request.PageSize)
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.p.Id,
