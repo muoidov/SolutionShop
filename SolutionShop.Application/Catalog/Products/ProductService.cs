@@ -162,7 +162,7 @@ namespace SolutionShop.Application.Catalog.Products
                     SeoTitle = x.pt.SeoTitle,
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount,
-                    Categories=x.ct.Name
+                    //Categories=x.ct.Name
                 }).ToListAsync();
 
             //4. Select and projection
