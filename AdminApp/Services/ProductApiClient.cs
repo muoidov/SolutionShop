@@ -67,7 +67,7 @@ namespace AdminApp.Services
         public async Task<PagedResult<ProductViewModel>> GetPagings(MGetProductPagingRequest request)
         {
  var data = await GetAsync<PagedResult<ProductViewModel>>
- ($"/api/Products/paging?PageIndex={request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&LanguageId={request.LanguageId}");
+ ($"/api/Products/paging?PageIndex={request.PageIndex}&PageSize={request.PageSize}&Keyword={request.Keyword}&LanguageId={request.LanguageId}&categoryId={request.CategoryId}");
           
             return data;
         }

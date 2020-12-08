@@ -27,12 +27,17 @@
                 <form asp-action="Index" method="get">
 
                     <div class="row">
-                        <div class="col-md-9">
-                            <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
+                        <div class="col-md-6">
+                            <input type="text" style="height:40px" value="@ViewBag.Keyword" name="keyword" class="form-control" />
                         </div>
-                        <div class="col-md-3">
-                            <button type="submit" class="btn-secondary">Tìm</button>
-                            <button type="button" onclick="window.location.href='/Product/Index'" class="btn-light">Tải lại</button>
+                        <div class="col-md-2">
+                            <select style="height:40px ;width:90px" onchange="this.form.submit()" name="categoryId" asp-items="@ViewBag.Categories">
+                                <option>Chọn</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" style="height:40px" class="btn-primary">Tìm</button>
+                            <button type="button" style="height:40px" onclick="window.location.href='/Product/Index'" class="btn-info">Tải lại</button>
                         </div>
                     </div>
                 </form>

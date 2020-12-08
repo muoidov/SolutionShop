@@ -24,7 +24,7 @@ namespace BackendApii.Controllers
             _productService = productService;
             
         }
-        
+         
         //[HttpGet("{languageId}")]
         //public async Task<IActionResult> GetAllPaging(string languageId,[FromQuery]PGetProductPagingRequest request)
         //{

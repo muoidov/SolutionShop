@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SolutionShop.Application.Catalog.Categories;
 using SolutionShop.Application.Catalog.Products;
 using SolutionShop.Application.Common;
 using SolutionShop.Application.System.Languages;
@@ -47,6 +48,7 @@ namespace BackendApii
             services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<Shopdbcontext>().AddDefaultTokenProviders();
            
             services.AddTransient<IProductService, ProductService>();
+           
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
@@ -56,7 +58,7 @@ namespace BackendApii
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
-
+            services.AddTransient<ICategoryService, CategoryService>();
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             services.AddSwaggerGen(c =>
             {
@@ -154,7 +156,7 @@ namespace BackendApii
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Homee}/{action=Index}/{id?}");
+                    pattern: "{controller=}/{action=}/{id?}");
             });
         }
     }
