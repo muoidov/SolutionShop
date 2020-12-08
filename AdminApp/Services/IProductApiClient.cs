@@ -12,5 +12,7 @@ namespace AdminApp.Services
     {
         Task<PagedResult<ProductViewModel>> GetPagings(MGetProductPagingRequest request);
         Task<bool> CreateProduct(ProductCreateRequest request);
+        Task<ProductViewModel> GetById(int id,string languageId);
+        Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
     }
 }

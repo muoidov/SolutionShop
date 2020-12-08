@@ -13,9 +13,9 @@ namespace AdminApp.Services
 {
     public class CategoryApiClient  :BaseApiClient , ICategoryApiClient
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        //private readonly IHttpClientFactory _httpClientFactory;
+        //private readonly IConfiguration _configuration;
+        //private readonly IHttpContextAccessor _httpContextAccessor;
         public CategoryApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
             : base(httpClientFactory, configuration, httpContextAccessor)
         {

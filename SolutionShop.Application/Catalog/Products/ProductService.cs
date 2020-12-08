@@ -126,9 +126,13 @@ namespace SolutionShop.Application.Catalog.Products
         {
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId
-                        join c in _context.Categories on pic.CategoryId equals c.Id
-                        where pt.LanguageId == request.LanguageId
+                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
+                        from pic in ppic.DefaultIfEmpty()
+                        join c in _context.Categories on pic.CategoryId equals c.Id into picc
+                        from c in picc.DefaultIfEmpty()
+                        //join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId into ctc
+                        //from ct in  ctc.DefaultIfEmpty()
+                         where pt.LanguageId == request.LanguageId
                         select new { p, pt,pic };
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
@@ -157,7 +161,8 @@ namespace SolutionShop.Application.Catalog.Products
                     SeoDescription = x.pt.SeoDescription,
                     SeoTitle = x.pt.SeoTitle,
                     Stock = x.p.Stock,
-                    ViewCount = x.p.ViewCount
+                    ViewCount = x.p.ViewCount,
+                    Categories=x.ct.Name
                 }).ToListAsync();
 
             //4. Select and projection
@@ -176,6 +181,11 @@ namespace SolutionShop.Application.Catalog.Products
         {
             var product = await _context.Products.FindAsync(productId);
             var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId && x.LanguageId == languageId);
+            var categories = await (from c in _context.Categories
+                             join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
+                             join pic in _context.ProductInCategories on c.Id equals pic.CategoryId
+                             where pic.ProductId==productId
+                             select ct.Name).ToListAsync();
 
             var productViewModel = new ProductViewModel()
             {
@@ -289,7 +299,44 @@ namespace SolutionShop.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
+        public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
+        {
+            var user = await _context.Products.FindAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiError<bool>($"San pham không tồn tại {id}");
+            }
+            var removedRoles = request.Categories.Where(x => x.Selected == false).ToList();
+            foreach (var roleName in request.Categories)
+            {
+                var productInCategory = await _context.ProductInCategories.FirstOrDefaultAsync
+                    (x=>x.CategoryId==int.Parse(roleName.Id)&&x.ProductId==id);
+                if (productInCategory != null && roleName.Selected == false)
+                {
+                    _context.ProductInCategories.Remove(productInCategory);
+                }
+                else if (productInCategory == null && roleName.Selected)
+                {
+                    await _context.ProductInCategories.AddAsync(new ProductInCategory(){
+                    CategoryId=int.Parse(roleName.Id),
+                    ProductId=id});
+                }
+            }
+            
+            var addedRoles = request.Categories.Where(x => x.Selected==true).ToList();
+            foreach (var roleName in addedRoles)
+            {
+                var productInCategory = await _context.ProductInCategories.FirstOrDefaultAsync
+                    (x => x.CategoryId == int.Parse(roleName.Id) && x.ProductId == id);
 
+                if (productInCategory==null)
+                {
+                    await _context.ProductInCategories.AddAsync(productInCategory);
+                }
+            }
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>();
+        }
 
         public async Task<bool> UpdatePrice(int productId, decimal newPrice)
         {

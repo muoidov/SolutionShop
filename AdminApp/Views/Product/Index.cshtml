@@ -74,35 +74,41 @@
                             <th>
                                 Mã SP
                             </th>
-                            <th></th>
+                            @*<th>
+                                Danh muc
+                            </th>*@
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.Items)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.OriginalPrice)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Price)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Stock)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Id)
-                                </td>
-                                <td>
-                                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ id = item.Id }) |
-                                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ id = item.Id }) |
-                                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */id = item.Id })
-                                   
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OriginalPrice)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Stock)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            @*<td>
+                                @Html.DisplayFor(modelItem => string.Join(",",item.Categories))
+                            </td>*@
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ id = item.Id }) |
+                                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ id = item.Id }) |
+                                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */id = item.Id })|
+                                @Html.ActionLink("Assign", "CategoryAssign", new { /* id=item.PrimaryKey */id = item.Id })
+
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

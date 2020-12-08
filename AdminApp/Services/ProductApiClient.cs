@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AdminApp.Services
@@ -27,6 +28,27 @@ namespace AdminApp.Services
             _httpClientFactory= httpClientFactory;
             _configuration = configuration;
         }
+
+        public async Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request)
+        {
+            
+            
+                var client = _httpClientFactory.CreateClient();
+                client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+                var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+                var json = JsonConvert.SerializeObject(request);
+                var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await client.PutAsync($"/api/Products/{id}/Categories", httpContent);
+                var result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                    return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+
+                return JsonConvert.DeserializeObject<ApiError<bool>>(result);
+            
+        }
+
+      
 
         public async Task<bool> CreateProduct(ProductCreateRequest request)
         {
@@ -62,6 +84,12 @@ namespace AdminApp.Services
             //requestContent.Add(new StringContent(request.LanguageId.ToString()), "languageid");
             var response = await client.PostAsync($"/api/Products/", requestContent);
             return response.IsSuccessStatusCode;
+        }
+
+        public  async Task<ProductViewModel> GetById(int id,string languageId)
+        {
+            var data = await GetAsync<ProductViewModel>($"/api/Products/{id}/{languageId}");
+            return data;
         }
 
         public async Task<PagedResult<ProductViewModel>> GetPagings(MGetProductPagingRequest request)

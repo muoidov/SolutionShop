@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolutionShop.ViewModel.Catalog.Categories;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,6 +20,7 @@ namespace SolutionShop.ViewModel.Catalog.ProductImages
         public string SeoTitle { set; get; }
         public string SeoAlias { get; set; }
         public string LanguageId { set; get; }
+        public List<string> Categories { get; set; } = new List<string>();
 
 
     }
