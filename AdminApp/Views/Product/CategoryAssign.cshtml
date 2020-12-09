@@ -1,0 +1,44 @@
+﻿@model SolutionShop.ViewModel.Catalog.Products.CategoryAssignRequest
+
+@{
+    ViewData["Title"] = "RoleAssign";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Gán danh muc</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Gán danh muc</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <div><a asp-action="Index" asp-controller="Product" class="btn btn-success">Return Index</a></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="CategoryAssign">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    @for (var i = 0; i < Model.Categories.Count; i++)
+                    {
+                        <div class="form-group">
+                            <label>
+                                @Model.Categories[i].Name
+                            <input asp-for="Categories[i].Selected" type="checkbox"/>
+                            <input asp-for="Categories[i].Id" type="hidden" />
+                            <input asp-for="Categories[i].Name" type="hidden" />
+                            </label>  
+                        </div>
+                    }
+                    <div class="form-group">
+                        <input type="submit" value="Lưu" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+        </div>
+        </div>
