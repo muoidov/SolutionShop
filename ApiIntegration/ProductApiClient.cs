@@ -6,15 +6,13 @@ using SolutionShop.ViewModel.Catalog.ProductImages;
 using SolutionShop.ViewModel.Catalog.Products;
 using SolutionShop.ViewModel.Common;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdminApp.Services
+namespace ApiIntegration.Services
 {
     public class ProductApiClient: BaseApiClient,IProductApiClient
     {
@@ -22,7 +20,7 @@ namespace AdminApp.Services
         private readonly IHttpClientFactory _httpClientFactory;
        private readonly IConfiguration _configuration;
         public ProductApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor):
-            base(httpClientFactory,configuration,httpContextAccessor)
+            base(httpClientFactory, httpContextAccessor,configuration)
         {
             _httpContextAccessor= httpContextAccessor;
             _httpClientFactory= httpClientFactory;

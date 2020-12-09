@@ -1,11 +1,8 @@
 ﻿using AdminApp.Models;
-using AdminApp.Services;
+using ApiIntegration.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolutionShop.Utilities.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AdminApp.Controllers.Components

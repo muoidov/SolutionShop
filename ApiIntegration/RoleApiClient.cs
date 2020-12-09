@@ -5,12 +5,11 @@ using SolutionShop.ViewModel.Common;
 using SolutionShop.ViewModel.System.Roles;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace AdminApp.Services
+namespace ApiIntegration.Services
 {
     public class RoleApiClient : IRoleApiClient
     {

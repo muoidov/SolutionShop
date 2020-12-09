@@ -1,7 +1,6 @@
 ﻿using SolutionShop.ViewModel.Common;
-using System;
 using System.Collections.Generic;
-using System.Text;
+
 
 namespace SolutionShop.ViewModel.Catalog.Products
 {

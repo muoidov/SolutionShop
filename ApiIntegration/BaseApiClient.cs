@@ -3,20 +3,18 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SolutionShop.Utilities.Constants;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace AdminApp.Services
+namespace ApiIntegration.Services
 {
     public class BaseApiClient
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        protected BaseApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        protected BaseApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor, IConfiguration configuration )
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;

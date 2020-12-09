@@ -5,8 +5,7 @@ using SolutionShop.Data.Configurations;
 using SolutionShop.Data.Entities;
 using SolutionShop.Data.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace SolutionShop.Data.EF
 {
@@ -34,6 +33,7 @@ namespace SolutionShop.Data.EF
             modelBuilder.ApplyConfiguration(new Promotionconfiguration());
             modelBuilder.ApplyConfiguration(new AppUserconfiguration());
             modelBuilder.ApplyConfiguration(new AppRoleconfiguration());
+            modelBuilder.ApplyConfiguration(new Slideconfiguration());
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x=>new {x.UserId,x.RoleId });
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogins").HasKey(x=>x.UserId);
@@ -69,6 +69,6 @@ namespace SolutionShop.Data.EF
 
         public DbSet<ProductImage> ProductImages { get; set; }
 
-        //public DbSet<Slide> Slides { get; set; }
+        public DbSet<Slide> Slides { get; set; }
     }
 }

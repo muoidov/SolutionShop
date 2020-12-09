@@ -22,8 +22,8 @@ namespace SolutionShop.ViewModel.Catalog.Products
         public int SortOrder { get; set; }
 
         public long FileSize { get; set; }
+        public bool? IsFeatured { get; set; }
 
-       
 
     }
 }

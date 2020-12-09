@@ -13,4 +13,9 @@
     <PackageReference Include="LazZiya.TagHelpers" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AdminApp\AdminApp.csproj" />
+    <ProjectReference Include="..\ApiIntegration\ApiIntegration.csproj" />
+  </ItemGroup>
+
 </Project>

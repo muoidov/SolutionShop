@@ -3,7 +3,6 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,14 +16,12 @@ using SolutionShop.Application.Common;
 using SolutionShop.Application.System.Languages;
 using SolutionShop.Application.System.Roles;
 using SolutionShop.Application.System.Users;
+using SolutionShop.Application.Ultilities.Slides;
 using SolutionShop.Data.EF;
 using SolutionShop.Data.Entities;
 using SolutionShop.Utilities.Constants;
 using SolutionShop.ViewModel.System.Users;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BackendApii
 {
@@ -56,6 +53,7 @@ namespace BackendApii
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ILanguageService, LanguageService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ISlideService, SlideService>();
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddTransient<ICategoryService, CategoryService>();

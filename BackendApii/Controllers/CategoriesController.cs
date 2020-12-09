@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolutionShop.Application.Catalog.Categories;
-using SolutionShop.Application.Catalog.Products;
-using SolutionShop.ViewModel.Catalog.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BackendApii.Controllers

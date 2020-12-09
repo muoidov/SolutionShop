@@ -4,14 +4,12 @@ using Newtonsoft.Json;
 using SolutionShop.ViewModel.Common;
 using SolutionShop.ViewModel.System.Users;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdminApp.Services
+namespace ApiIntegration.Services
 {
     public class UserApiClient : IUserApiClient
     {
