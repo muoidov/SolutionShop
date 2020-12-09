@@ -8,11 +8,11 @@ using System.Diagnostics;
 namespace AdminApp.Controllers
 {
     //[Authorize]
-    public class HomeController : BaseController 
+    public class HomeAController : BaseController 
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeAController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeAController(ILogger<HomeAController> logger)
         {
             _logger = logger;
         }

@@ -21,6 +21,7 @@ namespace SolutionShop.ViewModel.Catalog.ProductImages
         public string SeoAlias { get; set; }
         public string LanguageId { set; get; }
         public List<string> Categories { get; set; } = new List<string>();
+        public string ThumbnailImage { get; set; }
 
 
     }

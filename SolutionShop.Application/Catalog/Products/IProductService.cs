@@ -26,5 +26,6 @@ namespace SolutionShop.Application.Catalog.Products
         Task<ProductImageViewModel> GetImageById(int imageId);
         public Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, PGetProductPagingRequest request);
         public Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
+        public Task<List<ProductViewModel>> GetFeaturedProducts(string languageId,int take);
     }
 }

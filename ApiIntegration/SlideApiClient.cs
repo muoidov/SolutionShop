@@ -19,7 +19,7 @@ namespace ApiIntegration
             }
             public async Task<List<SlideVm>> GetAll()
             {
-                return await GetAsync<List<SlideVm>>("/api/Slides");
+                return await GetListAsync<SlideVm>("/api/Slides");
             }
         }
     }

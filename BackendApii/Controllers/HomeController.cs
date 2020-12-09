@@ -6,11 +6,11 @@ using System.Diagnostics;
 namespace BackendApii.Controllers
 {
 
-    public class HomeeController : Controller
+    public class HomeController : Controller
     {
-        private readonly ILogger<HomeeController> _logger;
+        private readonly ILogger<HomeController> _logger;
 
-        public HomeeController(ILogger<HomeeController> logger)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }

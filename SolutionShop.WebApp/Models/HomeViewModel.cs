@@ -1,4 +1,5 @@
-﻿using SolutionShop.ViewModel.Ultilities.Slides;
+﻿using SolutionShop.ViewModel.Catalog.ProductImages;
+using SolutionShop.ViewModel.Ultilities.Slides;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace SolutionShop.WebApp.Models
     public class HomeViewModel
     {
         public List<SlideVm> Slides { get; set; }
+        public List<ProductViewModel> FeaturedProducts { get; set; }
     }
 }

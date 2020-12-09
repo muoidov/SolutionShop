@@ -31,7 +31,7 @@ namespace BackendApii.Controllers
         //}
 
         [HttpGet("paging")]
-        public async Task<IActionResult> GetAllPaging([FromQuery] MGetProductPagingRequest request)
+        public async Task<IActionResult> GetAllPaging([FromQuery]MGetProductPagingRequest request)
         {
             var products = await _productService.GetAllPaging(request);
             return Ok(products);
@@ -47,8 +47,17 @@ namespace BackendApii.Controllers
             return Ok(product);
         }
 
+        [HttpGet("featured/{languageId}/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetFeaturedProducts( string languageId,int take)
+        {
+            var product = await _productService.GetFeaturedProducts(languageId,take);
+            return Ok(product);
+        }
+
+
         // POST api/<ProductController>
-        
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)

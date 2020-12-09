@@ -1,5 +1,5 @@
 ﻿@model HomeViewModel
-@using SolutionShop.ViewModel.Catalog.Products;
+@using SolutionShop.ViewModel.Catalog.ProductImages;
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -31,26 +31,26 @@
     <div class="row-fluid">
         <div id="featured" class="carousel slide">
             <div class="carousel-inner">
-                @*@{
-                    List<List<ProductVm>> featuredProducts = new List<List<ProductVm>>();
-                    List<ProductVm> featuredPart = new List<ProductVm>();
+                @{
+                    List<List<ProductViewModel>> featuredproducts = new List<List<ProductViewModel>>();
+                    List<ProductViewModel> featuredpart = new List<ProductViewModel>();
                 }
 
                 @for (int index = 0; index < Model.FeaturedProducts.Count; index++)
                 {
-                    featuredPart.Add(Model.FeaturedProducts[index]);
-                    if (featuredPart.Count == 4 || Model.FeaturedProducts.Count < 4)
+                    featuredpart.Add(Model.FeaturedProducts[index]);
+                    if (featuredpart.Count == 4 || Model.FeaturedProducts.Count < 4)
                     {
-                        featuredProducts.Add(featuredPart);
-                        featuredPart = new List<ProductVm>();
+                        featuredproducts.Add(featuredpart);
+                        featuredpart = new List<ProductViewModel>();
                     }
 
-                }*@
-                @*@for (int index = 0; index < featuredProducts.Count; index++)
+                }
+                @for (int index = 0; index < featuredproducts.Count; index++)
                 {
                     <div class="item @(index == 0?"active":"")">
                         <ul class="thumbnails">
-                            @foreach (var item in featuredProducts[index])
+                            @foreach (var item in featuredproducts[index])
                             {
                                 <li class="span3">
                                     <div class="thumbnail">
@@ -65,7 +65,7 @@
                             }
                         </ul>
                     </div>
-                }*@
+                }
             </div>
             <a class="left carousel-control" href="#featured" data-slide="prev">‹</a>
             <a class="right carousel-control" href="#featured" data-slide="next">›</a>

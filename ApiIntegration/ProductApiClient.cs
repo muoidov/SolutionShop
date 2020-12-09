@@ -6,6 +6,7 @@ using SolutionShop.ViewModel.Catalog.ProductImages;
 using SolutionShop.ViewModel.Catalog.Products;
 using SolutionShop.ViewModel.Common;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -87,6 +88,12 @@ namespace ApiIntegration.Services
         public  async Task<ProductViewModel> GetById(int id,string languageId)
         {
             var data = await GetAsync<ProductViewModel>($"/api/Products/{id}/{languageId}");
+            return data;
+        }
+
+        public async Task<List<ProductViewModel>> GetFeaturedProducts(int take, string languageId)
+        {
+            var data = await GetListAsync<ProductViewModel>($"/api/Products/featured/{languageId}/{take}");
             return data;
         }
 
