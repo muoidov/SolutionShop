@@ -14,6 +14,7 @@ using System.IO;
 using SolutionShop.Application.Common;
 using SolutionShop.ViewModel.Catalog.Products;
 using Microsoft.EntityFrameworkCore;
+using SolutionShop.Utilities.Constants;
 
 namespace SolutionShop.Application.Catalog.Products
 {
@@ -61,8 +62,44 @@ namespace SolutionShop.Application.Catalog.Products
 
         public async Task<int> Create(ProductCreateRequest request)
         {
-            var product = new Product()
+            var languages = _context.Languages;
+            var translation = new List<ProductTranslation>();
+            foreach (var language in languages)
             {
+                if (language.Id == request.LanguageId)
+                {
+                    translation.Add(new ProductTranslation()
+                    {
+
+                        Name = request.Name,
+                        Description = request.Description,
+                        Details = request.Details,
+                        SeoDescription = request.SeoDescription,
+                        SeoAlias = request.SeoAlias,
+                        SeoTitle = request.SeoTitle,
+                        LanguageId = request.LanguageId
+
+                    });
+                }
+                else
+                {
+                    translation.Add(new ProductTranslation()
+                    {
+
+                        Name = SystemConstants.ProductConstants.NA,
+                        Description = SystemConstants.ProductConstants.NA,
+                      
+                        SeoDescription = SystemConstants.ProductConstants.NA,
+                        SeoAlias = SystemConstants.ProductConstants.NA,
+                        SeoTitle = SystemConstants.ProductConstants.NA,
+                        LanguageId = SystemConstants.ProductConstants.NA
+
+                    });
+                }
+            }
+        var product = new Product()
+            {
+
                 Price = request.Price,
                 OriginalPrice = request.OriginalPrice,
                 Stock = request.Stock,
@@ -81,8 +118,6 @@ namespace SolutionShop.Application.Catalog.Products
                         LanguageId=request.LanguageId
                     }
                 }
-
-
             };
             //Save image
             if (request.ThumbnailImage != null)
@@ -452,7 +487,8 @@ namespace SolutionShop.Application.Catalog.Products
         public async Task<List<ProductViewModel>> GetLastestProducts(string languageId, int take)
         {
             var query = from p in _context.Products
-                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId
+                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId into ppt
+                        from pt in ppt.DefaultIfEmpty()
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
                         from pic in ppic.DefaultIfEmpty()
                         join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
@@ -473,14 +509,14 @@ namespace SolutionShop.Application.Catalog.Products
                     Id = x.p.Id,
                     Name = x.pt.Name,
                     DateCreated = x.p.DateCreated,
-                    Description = x.pt.Description,
+                    Description =  x.pt.Description,
                     Details = x.pt.Details,
                     LanguageId = x.pt.LanguageId,
                     OriginalPrice = x.p.OriginalPrice,
                     Price = x.p.Price,
-                    SeoAlias = x.pt.SeoAlias,
-                    SeoDescription = x.pt.SeoDescription,
-                    SeoTitle = x.pt.SeoTitle,
+                    SeoAlias =  x.pt.SeoAlias,
+                    SeoDescription =  x.pt.SeoDescription,
+                    SeoTitle =  x.pt.SeoTitle,
                     Stock = x.p.Stock,
                     ViewCount = x.p.ViewCount,
                     ThumbnailImage = x.pi.ImagePath

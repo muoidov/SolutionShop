@@ -57,7 +57,7 @@ namespace AdminApp.Controllers
                             userPrincipal,
                             authProperties);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "HomeA");
         }
 
         

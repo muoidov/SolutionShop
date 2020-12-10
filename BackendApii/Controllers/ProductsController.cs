@@ -83,8 +83,14 @@ namespace BackendApii.Controllers
         }
         // PUT api/<ProductController>/5
         [HttpPut]
-            public async Task<IActionResult> Update([FromForm] ProductUpdateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromRoute]int productId,[FromForm] ProductUpdateRequest request)
             {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            request.Id = productId;
                 var affectrs = await _productService.Update(request);
                 if (affectrs == 0)
                     return BadRequest();

@@ -108,7 +108,7 @@ namespace AdminApp.Controllers
                 Id=user.Id};
                 return View(updateRequest);
             }
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Error", "HomeA");
         }
         [HttpPost]
         public async Task<IActionResult> Edit(UserUpdateRequest request)
