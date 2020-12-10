@@ -128,6 +128,7 @@ namespace SolutionShop.Application.Catalog.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
                         from pic in ppic.DefaultIfEmpty()
+                        
                         join c in _context.Categories on pic.CategoryId equals c.Id into picc
                         from c in picc.DefaultIfEmpty()
                         //join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId into ctc
@@ -410,13 +411,15 @@ namespace SolutionShop.Application.Catalog.Products
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
-                        join pi in _context.ProductImages.Where(x=>x.IsDefault==true) on p.Id equals pi.ProductId
                         from pic in ppic.DefaultIfEmpty()
+                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
+                        from pi in ppi.DefaultIfEmpty()
                         join c in _context.Categories on pic.CategoryId equals c.Id into picc
                         from c in picc.DefaultIfEmpty()
                             //join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId into ctc
                             //from ct in  ctc.DefaultIfEmpty()
-                        where pt.LanguageId == languageId
+                        where pt.LanguageId == languageId && ( pi==null|| pi.IsDefault ==true )
+                        && p.IsFeatured==true   
                         select new { p, pt, pic,pi };
             //2. filter
             
@@ -444,6 +447,49 @@ namespace SolutionShop.Application.Catalog.Products
             //4. Select and projection
             
             return data;
+        }
+
+        public async Task<List<ProductViewModel>> GetLastestProducts(string languageId, int take)
+        {
+            var query = from p in _context.Products
+                        join pt in _context.ProductTranslations on p.Id equals pt.ProductId
+                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId into ppic
+                        from pic in ppic.DefaultIfEmpty()
+                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
+                        from pi in ppi.DefaultIfEmpty()
+                        join c in _context.Categories on pic.CategoryId equals c.Id into picc
+                        from c in picc.DefaultIfEmpty()
+                            //join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId into ctc
+                            //from ct in  ctc.DefaultIfEmpty()
+                        where pt.LanguageId == languageId && (pi == null || pi.IsDefault == true)
+                        
+                        select new { p, pt, pic, pi };
+            //2. filter
+
+            // .Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
+            var data = await query.OrderByDescending(x => x.p.DateCreated).Take(take)
+                .Select(x => new ProductViewModel()
+                {
+                    Id = x.p.Id,
+                    Name = x.pt.Name,
+                    DateCreated = x.p.DateCreated,
+                    Description = x.pt.Description,
+                    Details = x.pt.Details,
+                    LanguageId = x.pt.LanguageId,
+                    OriginalPrice = x.p.OriginalPrice,
+                    Price = x.p.Price,
+                    SeoAlias = x.pt.SeoAlias,
+                    SeoDescription = x.pt.SeoDescription,
+                    SeoTitle = x.pt.SeoTitle,
+                    Stock = x.p.Stock,
+                    ViewCount = x.p.ViewCount,
+                    ThumbnailImage = x.pi.ImagePath
+                    //Categories=x.ct.Name
+                }).ToListAsync();
+
+            //4. Select and projection
+            return data;
+
         }
     }
 }

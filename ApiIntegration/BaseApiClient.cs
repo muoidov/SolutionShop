@@ -54,7 +54,7 @@ namespace ApiIntegration.Services
 
             var response = await client.GetAsync(url);
             var body = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 var data = (List<T>)JsonConvert.DeserializeObject(body, typeof(List<T>));
                 return data;

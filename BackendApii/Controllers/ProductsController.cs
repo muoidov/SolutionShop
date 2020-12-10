@@ -51,8 +51,15 @@ namespace BackendApii.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetFeaturedProducts( string languageId,int take)
         {
-            var product = await _productService.GetFeaturedProducts(languageId,take);
-            return Ok(product);
+            var products = await _productService.GetFeaturedProducts(languageId,take);
+            return Ok(products);
+        }
+        [HttpGet("lastest/{languageId}/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetLastestProducts(string languageId, int take)
+        {
+            var products = await _productService.GetLastestProducts(languageId, take);
+            return Ok(products);
         }
 
 

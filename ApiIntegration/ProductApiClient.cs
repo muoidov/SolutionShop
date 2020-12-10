@@ -87,13 +87,19 @@ namespace ApiIntegration.Services
 
         public  async Task<ProductViewModel> GetById(int id,string languageId)
         {
-            var data = await GetAsync<ProductViewModel>($"/api/Products/{id}/{languageId}");
+            var data = await GetAsync<ProductViewModel>($"/api/products/{id}/{languageId}");
             return data;
         }
 
-        public async Task<List<ProductViewModel>> GetFeaturedProducts(int take, string languageId)
+        public async Task<List<ProductViewModel>> GetFeaturedProducts( string languageId,int take)
         {
-            var data = await GetListAsync<ProductViewModel>($"/api/Products/featured/{languageId}/{take}");
+            var data = await GetListAsync<ProductViewModel>($"/api/products/featured/{languageId}/{take}");
+            return data;
+        }
+
+        public async Task<List<ProductViewModel>> GetLastestProducts(string languageId, int take)
+        {
+            var data = await GetListAsync<ProductViewModel>($"/api/products/lastest/{languageId}/{take}");
             return data;
         }
 

@@ -13,6 +13,9 @@ namespace SolutionShop.Utilities.Constants
             public const string BaseAddress = "BaseAddress";
         }
         public class ProductSettings
-        { public const int NumberOfFeaturedProduct = 4; }
+        { 
+            public const int NumberOfFeaturedProduct = 4;
+            public const int NumberOfLastestProduct = 6;
+        }
     }
 }

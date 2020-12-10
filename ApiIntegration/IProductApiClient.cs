@@ -11,7 +11,8 @@ namespace ApiIntegration.Services
         Task<PagedResult<ProductViewModel>> GetPagings(MGetProductPagingRequest request);
         Task<bool> CreateProduct(ProductCreateRequest request);
         Task<ProductViewModel> GetById(int id,string languageId);
-        Task<List<ProductViewModel>> GetFeaturedProducts(int take,string languageId);
+        Task<List<ProductViewModel>> GetFeaturedProducts(string languageId, int take);
+        Task<List<ProductViewModel>> GetLastestProducts(string languageId, int take);
         Task<ApiResult<bool>> CategoryAssign(int id, CategoryAssignRequest request);
     }
 }

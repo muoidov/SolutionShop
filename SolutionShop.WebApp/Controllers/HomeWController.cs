@@ -39,7 +39,9 @@ namespace SolutionShop.WebApp.Controllers
             {
                 Slides = await _slideApiClient.GetAll()
                 ,
-                FeaturedProducts = await _produtApiClient.GetFeaturedProducts(SystemConstants.ProductSettings.NumberOfFeaturedProduct,culture)
+                FeaturedProducts = await _produtApiClient.GetFeaturedProducts(culture,SystemConstants.ProductSettings.NumberOfFeaturedProduct),
+                LastestProducts = await _produtApiClient.GetLastestProducts(culture,SystemConstants.ProductSettings.NumberOfLastestProduct)
+
             };
 
             return View(viewModel); 

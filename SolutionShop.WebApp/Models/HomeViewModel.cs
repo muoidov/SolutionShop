@@ -11,5 +11,6 @@ namespace SolutionShop.WebApp.Models
     {
         public List<SlideVm> Slides { get; set; }
         public List<ProductViewModel> FeaturedProducts { get; set; }
+        public List<ProductViewModel> LastestProducts { get; set; }
     }
 }
