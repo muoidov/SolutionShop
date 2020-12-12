@@ -22,4 +22,10 @@ namespace ApiIntegration.Services
             return await GetAsync<List<CategoryVm>>("/api/Categories?languageId="+languageId);
         
     }
-}}
+
+        public async Task<CategoryVm> GetById(string languageId, int id)
+        {
+            return await GetAsync<CategoryVm>($"/api/Categories/{id}/{languageId}");
+        }
+    }
+}

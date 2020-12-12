@@ -12,7 +12,6 @@ namespace BackendApii.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -67,6 +66,7 @@ namespace BackendApii.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
+        [Authorize]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -84,6 +84,7 @@ namespace BackendApii.Controllers
         // PUT api/<ProductController>/5
         [HttpPut]
         [Consumes("multipart/form-data")]
+        [Authorize]
         public async Task<IActionResult> Update([FromRoute]int productId,[FromForm] ProductUpdateRequest request)
             {
             if (!ModelState.IsValid)
@@ -130,7 +131,8 @@ namespace BackendApii.Controllers
                 return CreatedAtAction(nameof(GetImageById), new { id = imageId }, image);
             }
             [HttpPut("{productId}/images/{imageId}")]
-            public async Task<IActionResult> UpdateImage(int imageId, [FromForm] ProductImageUpdateRequest request)
+        [Authorize]
+        public async Task<IActionResult> UpdateImage(int imageId, [FromForm] ProductImageUpdateRequest request)
             {
                 if (!ModelState.IsValid)
                 {
@@ -143,7 +145,8 @@ namespace BackendApii.Controllers
                 return Ok();
             }
             [HttpDelete("{productId}/images/{imageId}")]
-            public async Task<IActionResult> RemoveImage(int imageId)
+        [Authorize]
+        public async Task<IActionResult> RemoveImage(int imageId)
             {
                 if (!ModelState.IsValid)
                 {

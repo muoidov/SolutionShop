@@ -166,10 +166,12 @@ namespace SolutionShop.Application.Catalog.Products
                         
                         join c in _context.Categories on pic.CategoryId equals c.Id into picc
                         from c in picc.DefaultIfEmpty()
+                        join pi in _context.ProductImages on p.Id equals pi.ProductId into ppi
+                        from pi in ppi.DefaultIfEmpty()
                         //join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId into ctc
                         //from ct in  ctc.DefaultIfEmpty()
-                         where pt.LanguageId == request.LanguageId
-                        select new { p, pt,pic };
+                         where pt.LanguageId == request.LanguageId && pi.IsDefault==true
+                        select new { p, pt,pic,pi };
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
                 query = query.Where(x => x.pt.Name.Contains(request.Keyword));
@@ -495,6 +497,7 @@ namespace SolutionShop.Application.Catalog.Products
                         from pi in ppi.DefaultIfEmpty()
                         join c in _context.Categories on pic.CategoryId equals c.Id into picc
                         from c in picc.DefaultIfEmpty()
+                    
                             //join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId into ctc
                             //from ct in  ctc.DefaultIfEmpty()
                         where pt.LanguageId == languageId && (pi == null || pi.IsDefault == true)
