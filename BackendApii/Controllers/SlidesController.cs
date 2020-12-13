@@ -7,7 +7,7 @@ namespace BackendApii.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize]
+    [Authorize]
     public class SlidesController : ControllerBase
     {
         private readonly ISlideService _SlideService;

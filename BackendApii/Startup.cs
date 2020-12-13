@@ -53,9 +53,10 @@ namespace BackendApii
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ILanguageService, LanguageService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<ISlideService, SlideService>();
+            
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
+            services.AddTransient<ISlideService, SlideService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             services.AddSwaggerGen(c =>

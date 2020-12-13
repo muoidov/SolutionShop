@@ -1,4 +1,4 @@
-﻿    using ApiIntegration.Services;
+﻿using ApiIntegration.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -9,35 +9,36 @@ using Microsoft.IdentityModel.Tokens;
 using SolutionShop.Utilities.Constants;
 using SolutionShop.ViewModel.System.Users;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdminApp.Controllers
+namespace SolutionShop.WebApp.Controllers
 {
-    public class LoginController : Controller
+    public class AccountController : Controller
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
-
-        public LoginController(IUserApiClient userApiClient, IConfiguration configuration)
+        public AccountController(IUserApiClient userApiClient, IConfiguration configuration)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
         }
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Login()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Index(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
+
             if (!ModelState.IsValid)
                 return View(ModelState);
-            var rs= await _userApiClient.Authenticate(request);
+            var rs = await _userApiClient.Authenticate(request);
             if (rs.Result == null)
             {
                 ModelState.AddModelError("", rs.Message);
@@ -49,18 +50,25 @@ namespace AdminApp.Controllers
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = false
             };
-         
-       
+            HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageId, _configuration["DefaultLanguageId"]);
+
             HttpContext.Session.SetString(SystemConstants.AppSettings.Token, rs.Result);
             await HttpContext.SignInAsync(
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             userPrincipal,
                             authProperties);
 
-            return RedirectToAction("Index", "HomeA");
-        }
+            return RedirectToAction("Index", "HomeW");
 
-        
+        }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+
+            return RedirectToAction("Index", "HomeW");
+        } 
             private ClaimsPrincipal ValidateToken(string jwtToken)
             {
                 IdentityModelEventSource.ShowPII = true;
@@ -79,5 +87,6 @@ namespace AdminApp.Controllers
 
                 return principal;
             }
-    }
+        }
+    } 
 }

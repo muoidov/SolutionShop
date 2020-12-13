@@ -23,6 +23,7 @@ namespace SolutionShop.Application.Catalog.Products
         //chi doc
         private readonly Shopdbcontext _context;
         private readonly IStorageService _storageService;
+        private const string USER_CONTENT_FOLDER_NAME = "user-content";
 
         public ProductService(Shopdbcontext context, IStorageService storageService)
         {
@@ -224,6 +225,7 @@ namespace SolutionShop.Application.Catalog.Products
                              join pic in _context.ProductInCategories on c.Id equals pic.CategoryId
                              where pic.ProductId==productId
                              select ct.Name).ToListAsync();
+            var image = await _context.ProductImages.Where(x => x.ProductId == productId && x.IsDefault == true).FirstOrDefaultAsync();
 
             var productViewModel = new ProductViewModel()
             {
@@ -239,7 +241,8 @@ namespace SolutionShop.Application.Catalog.Products
                 SeoDescription = productTranslation != null ? productTranslation.SeoDescription : null,
                 SeoTitle = productTranslation != null ? productTranslation.SeoTitle : null,
                 Stock = product.Stock,
-                ViewCount = product.ViewCount
+                ViewCount = product.ViewCount,
+                ThumbnailImage=image!=null?image.ImagePath:"noi.jpg"
             };
             return productViewModel;
         }
@@ -396,7 +399,7 @@ namespace SolutionShop.Application.Catalog.Products
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-            return fileName;
+            return USER_CONTENT_FOLDER_NAME+"/"+fileName;
         }
         public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, PGetProductPagingRequest request)
         {

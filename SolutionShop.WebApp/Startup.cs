@@ -1,6 +1,7 @@
 using ApiIntegration;
 using ApiIntegration.Services;
 using LazZiya.ExpressLocalization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -32,6 +33,12 @@ namespace SolutionShop.WebApp
                 new CultureInfo("en"),
                 new CultureInfo("vi"),
             };
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(options =>
+               {
+                   options.LoginPath = "/Account/Login/";
+                   options.AccessDeniedPath = "/User/Forbidden/";
+               });
             services.AddControllersWithViews().AddExpressLocalization<ExpressLocalizationResource, ViewLocalizationResource>(ops =>
             {
 
@@ -52,6 +59,7 @@ namespace SolutionShop.WebApp
             services.AddTransient<ISlideApiClient, SlideApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+            services.AddTransient<IUserApiClient, UserApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

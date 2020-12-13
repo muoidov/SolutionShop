@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ApiIntegration": {
+      "commandName": "Project",
+      "sqlDebugging": false,
+      "nativeDebugging": false
+    }
+  }
+}

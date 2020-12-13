@@ -1,10 +1,10 @@
-﻿ {
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:51439",
-      "sslPort": 44347
+      "applicationUrl": "http://localhost:5001",
+      "sslPort": 44352
     }
   },
   "profiles": {
@@ -13,16 +13,18 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "sqlDebugging": false,
+      "nativeDebugging": false
     },
     "BackendApii": {
       "commandName": "Project",
-      "launchBrowser":false,
+      "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:5001",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "https://localhost:5001"
     }
   }
 }
