@@ -37,11 +37,11 @@ namespace SolutionShop.WebApp.Controllers
         {
 
             if (!ModelState.IsValid)
-                return View(ModelState);
+                return View(request);
             var rs = await _userApiClient.Authenticate(request);
             if (rs.Result == null)
             {
-                ModelState.AddModelError("", rs.Message);
+                ModelState.AddModelError("", "Ko the dang nhap");
                 return View();
             }
             var userPrincipal = this.ValidateToken(rs.Result);
@@ -68,8 +68,50 @@ namespace SolutionShop.WebApp.Controllers
 
 
             return RedirectToAction("Index", "HomeW");
-        } 
-            private ClaimsPrincipal ValidateToken(string jwtToken)
+        }
+        [HttpGet]
+        public async Task<IActionResult> Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterRequest request)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+            var rs = await _userApiClient.RegisterUser(request);
+            if (rs.IsSuccessed)
+            {
+                ModelState.AddModelError("", rs.Message);
+                return View();
+            }
+
+            var lgrs = await _userApiClient.Authenticate(new LoginRequest() { 
+            UserName=request.UserName,
+            PassWord=request.PassWord,
+            RememberMe=true
+            });
+
+            var userPrincipal = this.ValidateToken(lgrs.Result);
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                IsPersistent = false
+            };
+            HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageId, _configuration["DefaultLanguageId"]);
+
+            HttpContext.Session.SetString(SystemConstants.AppSettings.Token, lgrs.Result);
+            await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            userPrincipal,
+                            authProperties);
+
+            return RedirectToAction("Index", "HomeW");
+        }
+        private ClaimsPrincipal ValidateToken(string jwtToken)
             {
                 IdentityModelEventSource.ShowPII = true;
 
@@ -89,4 +131,4 @@ namespace SolutionShop.WebApp.Controllers
             }
         }
     } 
-}
+

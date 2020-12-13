@@ -1,5 +1,6 @@
 using ApiIntegration;
 using ApiIntegration.Services;
+using FluentValidation.AspNetCore;
 using LazZiya.ExpressLocalization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SolutionShop.ViewModel.System.Users;
 using SolutionShop.WebApp.LocalizationResources;
 using System;
 using System.Globalization;
@@ -39,7 +41,8 @@ namespace SolutionShop.WebApp
                    options.LoginPath = "/Account/Login/";
                    options.AccessDeniedPath = "/User/Forbidden/";
                });
-            services.AddControllersWithViews().AddExpressLocalization<ExpressLocalizationResource, ViewLocalizationResource>(ops =>
+            services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>()).
+                AddExpressLocalization<ExpressLocalizationResource, ViewLocalizationResource>(ops =>
             {
 
                 ops.UseAllCultureProviders = false;
