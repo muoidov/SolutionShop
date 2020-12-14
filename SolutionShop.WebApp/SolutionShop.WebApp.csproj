@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AdminApp\AdminApp.csproj" />
     <ProjectReference Include="..\ApiIntegration\ApiIntegration.csproj" />
+    <ProjectReference Include="..\SolutionShop.ViewModel\SolutionShop.ViewModel.csproj" />
   </ItemGroup>
 
 </Project>
