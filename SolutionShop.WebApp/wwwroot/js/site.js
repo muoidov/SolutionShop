@@ -4,7 +4,7 @@
 // Write your JavaScript code.
 var siteController = function () {
     this.initialize - function () {
-        resgiterEvents
+        resgiterEvents();
         loadCart();
 
     }
