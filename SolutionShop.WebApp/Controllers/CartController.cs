@@ -20,6 +20,16 @@ namespace SolutionShop.WebApp.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public IActionResult GetListItems()
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+            if (session != null)
+                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
+            return Ok(currentCart);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddToCart(int id, string languageId)
         {
@@ -43,12 +53,13 @@ namespace SolutionShop.WebApp.Controllers
                 Description = product.Description,
                 Image = product.ThumbnailImage,
                 Name = product.Name,
+                Price=product.Price,
                 Quantity =quantity
             };
             if (currentCart == null) currentCart = new List<CartItemViewModel>();
             currentCart.Add(cartItem);
             HttpContext.Session.SetString(SystemConstants.CartSession,JsonConvert.SerializeObject(cartItem));
-            return Ok();
+            return Ok(currentCart);
         }
     }
 }

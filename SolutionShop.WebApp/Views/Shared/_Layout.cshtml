@@ -1,13 +1,14 @@
-﻿@{
-    var culture = CultureInfo.CurrentCulture.Name;
-}
+﻿@{ var culture = CultureInfo.CurrentCulture.Name; }
+@inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Bootshop online Shopping cart</title>
+    <title>@ViewData["Title"]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
+    <meta name="description" content="@ViewData["Description"]">
     <meta name="author" content="">
     <!--Less styles -->
     <!-- Other Less css file //different less files has different color scheam
@@ -34,30 +35,30 @@
     <style type="text/css" id="enject"></style>
 </head>
 <body>
-    <input type="hidden" id="hidCulture" value="@culture"/>
+    <input type="hidden" id="hidCulture" value="@culture" />
+    <input type="hidden" id="hidBaseAddress" value="@Configuration["BaseAddress"]" />
     <div id="header">
         <div class="container">
             <div id="welcomeLine" class="row">
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <div class="span6">Welcome <strong>@User.Identity.Name</strong></div>
-                }
-                else
-                {
-                    <div class="span6">Welcome <strong>@User.Identity.Name</strong></div>
-                }
+    <div class="span6">Welcome <strong>@User.Identity.Name</strong></div> }
+else
+{
+<div class="span6">Welcome <strong>@User.Identity.Name</strong></div>}
                 <div class="span6">
                     <div class="pull-right">
                         @*<a href="product_summary.html"><span class="">Fr</span></a>
-                <a href="product_summary.html"><span class="">Es</span></a>
-                <span class="btn btn-mini">En</span>
-                <a href="product_summary.html"><span>&pound;</span></a>
-                <span class="btn btn-mini">$155.00</span>
-                <a href="product_summary.html"><span class="">$</span></a>*@
+                            <a href="product_summary.html"><span class="">Es</span></a>
+                            <span class="btn btn-mini">En</span>
+                            <a href="product_summary.html"><span>&pound;</span></a>
+                            <span class="btn btn-mini">$155.00</span>
+                            <a href="product_summary.html"><span class="">$</span></a>*@
                         <language-nav language-label="NativeName"
                                       cookie-handler-url="@(Url.Action("SetCultureCookie", "Home", new { area= "", cltr="{0}", returnUrl="{1}" }))">
                         </language-nav>
-                        <a href="product_summary.html"><span class="btn btn-mini btn-primary"><i class="icon-shopping-cart icon-white"></i> [ 3 ] Itemes in your cart </span> </a>
+                        <a href="/@culture/cart"><span class="btn btn-mini btn-primary"><i class="icon-shopping-cart icon-white">
+                                </i> [ <span id="lbl_number_items_header">0</span> ] Itemes in your cart </span> </a>
                     </div>
                 </div>
             </div>
@@ -90,17 +91,16 @@
                             @if (User.Identity.IsAuthenticated)
                             {
 
-                        <form action="@culture/Account/Logout" method="post">
-                            <button type="submit" >
-                                <span class="btn btn-danger btn-success"><localize>Logout</localize></span>
-                            </button>
-                        </form>
-
-                        }else
-                                    {
-                        <a href="/@culture/Account/Login" style="padding-right:0;margin-top:10px;margin-bottom:0px;background:transparent;border:none;">
-                            <span class="btn btn-large btn-success"><localize>Login</localize></span>
-                        </a>}
+                <form action="@culture/Account/Logout" method="post">
+                    <button type="submit">
+                        <span class="btn btn-danger btn-success"><localize>Logout</localize></span>
+                    </button>
+                </form> }
+            else
+            {
+<a href="/@culture/Account/Login" style="padding-right:0;margin-top:10px;margin-bottom:0px;background:transparent;border:none;">
+    <span class="btn btn-large btn-success"><localize>Login</localize></span>
+</a>}
 
                         </li>
                     </ul>
@@ -231,6 +231,11 @@
     <script src="/themes/js/bootshop.js"></script>
     <script src="/themes/js/jquery.lightbox-0.5.js"></script>
     <script src="~/js/site.js"></script>
+    <script>
+        var site = new siteController();
+        site.initialize();
+    </script>
+    @RenderSection("scripts", required: false)
     <!-- /themes switcher section ============================================================================================= -->
     <div id="secectionBox">
         <link rel="stylesheet" href="/themes/switch/themeswitch.css" type="text/css" media="screen" />
@@ -240,18 +245,23 @@
             <div class="themeName">Oregional Skin</div>
             <div class="images style">
                 <a href="/themes/css/#" name="bootshop">
-                <img src="/themes/switch/images/clr/bootshop.png" alt="bootstrap business templates" class="active"></a>
+                    <img src="/themes/switch/images/clr/bootshop.png" alt="bootstrap business templates" class="active">
+                </a>
                 <a href="/themes/css/#" name="businessltd">
-                <img src="/themes/switch/images/clr/businessltd.png" alt="bootstrap business templates" class="active"></a>
+                    <img src="/themes/switch/images/clr/businessltd.png" alt="bootstrap business templates" class="active">
+                </a>
             </div>
             <div class="themeName">Bootswatch Skins (11)</div>
             <div class="images style">
                 <a href="/themes/css/#" name="amelia" title="Amelia">
-                <img src="/themes/switch/images/clr/amelia.png" alt="bootstrap business templates"></a>
+                    <img src="/themes/switch/images/clr/amelia.png" alt="bootstrap business templates">
+                </a>
                 <a href="/themes/css/#" name="spruce" title="Spruce">
-                <img src="/themes/switch/images/clr/spruce.png" alt="bootstrap business templates"></a>
+                    <img src="/themes/switch/images/clr/spruce.png" alt="bootstrap business templates">
+                </a>
                 <a href="/themes/css/#" name="superhero" title="Superhero">
-                <img src="/themes/switch/images/clr/superhero.png" alt="bootstrap business templates"></a>
+                    <img src="/themes/switch/images/clr/superhero.png" alt="bootstrap business templates">
+                </a>
                 <a href="/themes/css/#" name="cyborg"><img src="/themes/switch/images/clr/cyborg.png" alt="bootstrap business templates"></a>
                 <a href="/themes/css/#" name="cerulean"><img src="/themes/switch/images/clr/cerulean.png" alt="bootstrap business templates"></a>
                 <a href="/themes/css/#" name="journal"><img src="/themes/switch/images/clr/journal.png" alt="bootstrap business templates"></a>
