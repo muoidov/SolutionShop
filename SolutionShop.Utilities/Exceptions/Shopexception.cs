@@ -18,7 +18,7 @@ namespace SolutionShop.Utilities.Exceptions
         }
 
         public Shopexception(string message, Exception inner)
-            : base(message, inner)
+            : base(message, inner)  
         {
         }
     }

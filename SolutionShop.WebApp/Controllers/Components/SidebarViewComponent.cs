@@ -10,7 +10,7 @@ namespace SolutionShop.WebApp.Controllers.Components
     {
         private readonly ICategoryApiClient _categoryApiClient;
         public SidebarViewComponent(ICategoryApiClient categoryApiClient)
-        {
+        { 
             _categoryApiClient = categoryApiClient;
         }
         public async Task<IViewComponentResult> InvokeAsync() {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApiIntegration
+namespace SolutionShop.ApiIntegration
 {
     public interface IOrderApiClient
     {

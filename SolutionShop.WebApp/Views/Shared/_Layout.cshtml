@@ -1,4 +1,7 @@
-﻿@{ var culture = CultureInfo.CurrentCulture.Name; }
+﻿@{
+    var culture = CultureInfo.CurrentCulture.Name;
+    }
+
 @inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc;
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
@@ -178,7 +181,7 @@ else
         <div class="container">
             <div class="row">
                 <!-- Sidebar ================================================== -->
-                @await Component.InvokeAsync("SideBar")
+                @*@await Component.InvokeAsync("Sidebar")*@
                 <!-- Sidebar end=============================================== -->
                 <div class="span9">
                     @RenderBody()
@@ -233,7 +236,7 @@ else
     <script src="~/js/site.js"></script>
     <script>
         var site = new siteController();
-        site.initialize();
+        site.initialize;
     </script>
     @RenderSection("scripts", required: false)
     <!-- /themes switcher section ============================================================================================= -->

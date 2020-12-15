@@ -6,6 +6,7 @@
 }
 @{ var culture = CultureInfo.CurrentCulture.Name;
 }
+
 @section slider{
     <div id="carouselBlk">
         <div id="myCarousel" class="carousel slide">
@@ -13,15 +14,17 @@
                 @for (int index = 0; index < Model.Slides.Count; index++)
                 {
                     var slide = Model.Slides[index];
-<div class="item @(index == 0?"active":"")">
-    <div class="container">
-        <a href="@slide.Url"><img style="width:100%" src="@slide.Image" alt="@slide.Name" /></a>
-        <div class="carousel-caption">
-            <h4>@slide.Name</h4>
-            <p>@slide.Description</p>
-        </div>
-    </div>
-</div>                }
+
+                    <div class="item @(index == 0?"active":"")">
+                        <div class="container">
+                            <a href="@slide.Url"><img style="width:100%" src="@slide.Image" alt="@slide.Name" /></a>
+                            <div class="carousel-caption">
+                                <h4>@slide.Name</h4>
+                                <p>@slide.Description</p>
+                            </div>
+                        </div>
+                    </div>         
+                    }
             </div>
             <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
             <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
@@ -34,7 +37,7 @@
         <div id="featured" class="carousel slide">
             <div class="carousel-inner">
                 @{ List<List<ProductViewModel>> featuredproducts = new List<List<ProductViewModel>>();
-                                List<ProductViewModel> featuredpart = new List<ProductViewModel>(); }
+                    List<ProductViewModel> featuredpart = new List<ProductViewModel>(); }
 
                 @for (int index = 0; index < Model.FeaturedProducts.Count; index++)
                 {
@@ -48,23 +51,24 @@
                 }
                 @for (int index = 0; index < featuredproducts.Count; index++)
                 {
-    <div class="item @(index == 0?"active":"")">
-        <ul class="thumbnails">
-            @foreach (var item in featuredproducts[index])
-            {
-                var url = $"/{culture}/{_loc["productUrl"]}/{item.Id}";
-<li class="span3">
-    <div class="thumbnail">
-        <i class="tag"></i>
-        <a href="@url"><img src="@(Configuration["BaseAddress"]+item.ThumbnailImage)" alt="@item.Name"></a>
-        <div class="caption">
-            <h5>@item.Name</h5>
-            <h4><a class="btn" href="" localize-content>VIEW</a> <span class="pull-right">@item.Price.ToString()</span></h4>
-        </div>
-    </div>
-</li>}
-        </ul>
-    </div>}
+                    <div class="item @(index == 0?"active":"")">
+                        <ul class="thumbnails">
+                            @foreach (var item in featuredproducts[index])
+                            {
+                                var url = $"/{culture}/{_loc["productUrl"]}/{item.Id}";
+                                <li class="span3">
+                                    <div class="thumbnail">
+                                        <i class="tag"></i>
+                                        <a href="@url"><img src="@(Configuration["BaseAddress"]+item.ThumbnailImage)" alt="@item.Name"></a>
+                                        <div class="caption">
+                                            <h5>@item.Name</h5>
+                                            <h4><a class="btn" href="" localize-content>VIEW</a> <span class="pull-right">@item.Price.ToString()</span></h4>
+                                        </div>
+                                    </div>
+                                </li>
+}
+                        </ul>
+                    </div>}
             </div>
             <a class="left carousel-control" href="#featured" data-slide="prev">‹</a>
             <a class="right carousel-control" href="#featured" data-slide="next">›</a>
@@ -76,23 +80,24 @@
     @foreach (var item in Model.LastestProducts)
     {
         var url = $"/{culture}/{_loc["productUrl"]}/{item.Id}";
-<li class="span3">
-    <div class="thumbnail">
-        <a href="@url"><img src="@(Configuration["BaseAddress"]+item.ThumbnailImage)" alt="@item.Name" /></a>
-        <div class="caption">
-            <h5>@item.Name</h5>
-            <p>
-                @item.Description
-            </p>
-            <h4 style="text-align:center">
-                <a class="btn" href="product_details.html">
-                    <i class="icon-zoom-in"></i>
-                </a> <a class="btn btn-add-cart" data-id="@item.Id" href="#">
-                    <localization>Add to</localization> <i class="icon-shopping-cart"></i>
-                </a>
-                <a class="btn btn-primary" href="#">@item.Price</a>
-            </h4>
-        </div>
-    </div>
-</li>}
+        <li class="span3">
+            <div class="thumbnail">
+                <a href="@url"><img src="@(Configuration["BaseAddress"]+item.ThumbnailImage)" alt="@item.Name" /></a>
+                <div class="caption">
+                    <h5>@item.Name</h5>
+                    <p>
+                        @item.Description
+                    </p>
+                    <h4 style="text-align:center">
+                        <a class="btn" href="product_details.html">
+                            <i class="icon-zoom-in"></i>
+                        </a> <a class="btn btn-add-cart" data-id="@item.Id" href="#">
+                            <localization>Add to</localization> <i class="icon-shopping-cart"></i>
+                        </a>
+                        <a class="btn btn-primary" href="#">@item.Price</a>
+                    </h4>
+                </div>
+            </div>
+        </li>
+}
 </ul>

@@ -17,12 +17,13 @@ namespace SolutionShop.ViewModel.System.Users
         [Display(Name = "SĐT")]
         public string PhoneNumber { get; set; }
         [Display(Name = "Tên đăng nhập")]
-        [DataType(DataType.Password)]
+        [DataType(DataType.Text)]
         public string UserName { get; set; }
         [Display(Name = "Mật khẩu")]
         [DataType(DataType.Password)]
         public string PassWord { get; set; }
         [Display(Name = "Xác nhận lại mk")]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
     }
 }

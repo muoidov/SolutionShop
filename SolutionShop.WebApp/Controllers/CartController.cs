@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SolutionShop.Sales;
 using SolutionShop.Utilities.Constants;
 using SolutionShop.ViewModel.Sales;
 using SolutionShop.WebApp.Models;
@@ -24,7 +25,7 @@ namespace SolutionShop.WebApp.Controllers
         }
         public IActionResult Checkout()
         {
-            
+
             return View(GetCheckoutViewModel());
         }
 
@@ -47,7 +48,7 @@ namespace SolutionShop.WebApp.Controllers
                 Name = request.CheckoutModel.Name,
                 Email = request.CheckoutModel.Email,
                 PhoneNumber = request.CheckoutModel.PhoneNumber,
-                OrderDetails=orderDetails
+                OrderDetails = orderDetails
 
             };
             TempData["SuccessMsg"] = "day thanh cong";
@@ -100,9 +101,10 @@ namespace SolutionShop.WebApp.Controllers
             foreach (var item in currentCart)
             {
                 if (item.ProductId == id)
-                {if (quantity == 0)
+                {
+                    if (quantity == 0)
                     {
-                     
+
                         currentCart.Remove(item);
                         break;
                     }
@@ -110,7 +112,7 @@ namespace SolutionShop.WebApp.Controllers
                     item.Quantity = quantity;
                 }
 
-                
+
             }
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
             return Ok(currentCart);

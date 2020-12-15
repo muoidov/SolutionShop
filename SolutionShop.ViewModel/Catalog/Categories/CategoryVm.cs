@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SolutionShop.ViewModel.Catalog.Categories
+﻿namespace SolutionShop.ViewModel.Catalog.Categories
 {
     public class CategoryVm
     {

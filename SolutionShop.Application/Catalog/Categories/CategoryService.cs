@@ -1,8 +1,6 @@
 ﻿using SolutionShop.Data.EF;
 using SolutionShop.ViewModel.Catalog.Categories;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -18,18 +16,16 @@ namespace SolutionShop.Application.Catalog.Categories
         }
         public async Task<List<CategoryVm>> GetAll(string languageId)
         {
+
             var query = from c in _context.Categories
                         join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
-                        //join pic in _context.ProductInCategories on p.Id equals pic.ProductId 
-                        //join c in _context.Categories on pic.CategoryId equals c.Id
                         where ct.LanguageId == languageId
                         select new { c, ct };
-
             return await query.Select(x => new CategoryVm()
             {
                 Id = x.c.Id,
                 Name = x.ct.Name,
-                ParentId=x.c.ParenId
+                ParentId = x.c.ParenId
             }).ToListAsync();
         }
 
@@ -37,9 +33,8 @@ namespace SolutionShop.Application.Catalog.Categories
         {
             var query = from c in _context.Categories
                         join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
-                        where ct.LanguageId == languageId && c.Id==id
+                        where ct.LanguageId == languageId && c.Id == id
                         select new { c, ct };
-
             return await query.Select(x => new CategoryVm()
             {
                 Id = x.c.Id,
@@ -47,5 +42,6 @@ namespace SolutionShop.Application.Catalog.Categories
                 ParentId = x.c.ParenId
             }).FirstOrDefaultAsync();
         }
-    }
+    
+}
 }

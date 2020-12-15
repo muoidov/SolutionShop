@@ -103,7 +103,7 @@ namespace SolutionShop.Data.Extensions
                 Email = "domuoi70@gmail.com",
                 NormalizedEmail = "domuoi70@gmail.com",
                 EmailConfirmed = true,
-                PasswordHash = hasher.HashPassword(null, "1234$"),
+                PasswordHash = hasher.HashPassword(null, "Abc123$"),
                 SecurityStamp = string.Empty,
                 FirstName = "Muoi",
                 LastName = "Do",
