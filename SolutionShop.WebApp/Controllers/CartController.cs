@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SolutionShop.Utilities.Constants;
+using SolutionShop.ViewModel.Sales;
 using SolutionShop.WebApp.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,37 @@ namespace SolutionShop.WebApp.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+        public IActionResult Checkout()
+        {
+            
+            return View(GetCheckoutViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult Checkout(CheckoutViewModel request)
+        {
+            var model = GetCheckoutViewModel();
+            var orderDetails = new List<OrderDetailVm>();
+            foreach (var item in model.CartItems)
+            {
+                orderDetails.Add(new OrderDetailVm()
+                {
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity
+                });
+            }
+            var checkoutRequest = new CheckoutRequest()
+            {
+                Address = request.CheckoutModel.Address,
+                Name = request.CheckoutModel.Name,
+                Email = request.CheckoutModel.Email,
+                PhoneNumber = request.CheckoutModel.PhoneNumber,
+                OrderDetails=orderDetails
+
+            };
+            TempData["SuccessMsg"] = "day thanh cong";
+            return View(model);
         }
         [HttpGet]
         public IActionResult GetListItems()
@@ -39,10 +71,6 @@ namespace SolutionShop.WebApp.Controllers
             List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
             if (session != null)
                 currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
-
-
-
-
             int quantity = 1;
             if (currentCart.Any(x => x.ProductId == id))
             {
@@ -86,6 +114,19 @@ namespace SolutionShop.WebApp.Controllers
             }
             HttpContext.Session.SetString(SystemConstants.CartSession, JsonConvert.SerializeObject(currentCart));
             return Ok(currentCart);
+        }
+        private CheckoutViewModel GetCheckoutViewModel()
+        {
+            var session = HttpContext.Session.GetString(SystemConstants.CartSession);
+            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+            if (session != null)
+                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
+            var checkoutVm = new CheckoutViewModel()
+            {
+                CartItems = currentCart,
+                CheckoutModel = new CheckoutRequest()
+            };
+            return checkoutVm;
         }
     }
 }
